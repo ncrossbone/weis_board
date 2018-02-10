@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<title>물환경 기초자료 연계관리시스템</title>
+<link href="../css/sub.css" rel="stylesheet" type="text/css" />
+<link href="../css/common.css" rel="stylesheet" type="text/css" />
+<link href="../css/BasicSet.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+	<div id="wrap" class="sty01">
+    	<div id="header">
+        	<div id="topmenu">
+				<div class="topmenu_inner contLayout">
+                    <h1>로고</h1>
+                    <ul class="util fr">
+                        <li class="member">[씨이기술님] 반갑습니다.</li>
+                        <li class="logout"><a href="#">로그아웃</a></li>
+                    </ul>
+            	</div>        
+            </div>
+            <div id="menu_wrap">
+                <div id="menu" class="fullLayout">
+                    <ul id="gnb" class="contLayout menu_num6">
+                        <li><a href="#">소개</a></li>
+                        <li><a href="#">자료실</a></li>
+                        <li><a href="#">사용현황</a></li>
+                        <li><a href="#">모니터링</a></li>
+                        <li><a href="#">기준정보</a></li>
+                        <li><a href="#">시스템관리</a></li>
+                    </ul>
+                </div>
+            </div><!--menu_wrap끝-->
+        </div><!--헤더끝-->
+        <div id="content_wrap" class="fullLayout">
+        	<div class="content contLayout">
+        		<div id="leftmenu">
+                	<div class="left_top">
+                        <h2>소개</h2>
+                    </div>
+                    <div class="left_nav">
+						<ul class="submenu">
+                        	<li><a href="#">시스템이란?</a></li>
+                        	<li><a href="#">연계기관현황</a></li>
+                        	<li><a href="#">연계자료현황</a></li>
+                        	<li><a href="#">연계신청</a></li>
+                        </ul>
+                    </div><!--left네비 끝-->
+                </div><!--left메뉴 끝-->
+                <div class="subcont2">
+                    <div class="cont_top">
+                        <p class="subtit">시스템이란?</p>
+                        <ul class="cont_nav">
+                            <li>HOME</li>
+                            <li>소개</li>
+                            <li>시스템이란?</li>
+                        </ul>
+                    </div>
+                    <!--top끝-->
+                    <div id="cont"> 
+                        <div class="division">
+                            <h3 class="tit">사용자관리</h3>
+                            <div class="AR">
+                                <a href="#" class="st01 btncom">기본</a>
+                                <a href="#" class="st02 btncom">비활성화</a>
+                            </div>
+                        </div>
+                        <table>
+                            <caption>사용자 관리</caption>
+                            <colgroup>
+                                <col width="13%"/>
+                                <col width="20%"/>
+                                <col width="13%"/>
+                                <col width="20%"/>
+                                <col width="13%"/>
+                                <col />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th><span class="star">사용자 ID</span></th>
+                                    <td><input type="text"></td>
+                                    <th>사용자 이름</th>
+                                    <td><input type="text"></td>
+                                    <th>소속</th>
+                                    <td><input type="text"></td>
+                                </tr>
+                                <tr>
+                                    <th>이메일</th>
+                                    <td><input type="text"></td>
+                                    <th>이동전화번호</th>
+                                    <td><input type="text"></td>
+                                    <th>라디오버튼</th>
+                                    <td>
+                                        <input name="aa" type="radio" value="" id="all" checked="checked" />전체</label>
+                                        <input name="aa" type="radio" value="" id="use" class="MgL10" /><label for="use">사용중</label>
+                                        <input name="aa" type="radio" value="" id="unused" class="MgL10" /><label for="unused">미사용</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<th>이메일</th>
+                                    <td colspan="5"><input type="text"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        
+                        
+                        
+                        <div class="division">
+                            <h3 class="tit2">조회목록<span>(검색 결과: 0건)</span></h3>
+                            <div class="AR">
+                                <a href="#" class="st01 btncom">기본</a>
+                                <a href="#" class="st02 btncom">비활성화</a>
+                            </div>
+                        </div>
+                        <div class="tscl" style="height:300px;">
+                            <table class="table02">
+                                <caption>사용자 관리</caption>
+                                <!--<colgroup>
+                                    <col width="13%"/>
+                                </colgroup>-->
+                                <thead>
+                                    <tr>
+                                        <th>사용자</th>
+                                        <th>권한등급</th>
+                                        <th>사용자 ID</th>
+                                        <th><a href="#">사용자 이름<img src="../images/asc.png" alt="오름차순" class="sort"/></a></th>
+                                        <th><a href="#">이동전화<img src="../images/des.png" alt="내림차순" class="sort"/></a></th>
+                                        <th>전화번호</th>
+                                        <th>팩스번호</th>
+                                        <th>이메일</th>
+                                        <th>소속</th>
+                                        <th>부서</th>
+                                        <th>전화번호</th>
+                                        <th>전화번호</th>
+                                        <th>전화번호</th>
+                                        <th>전화번호</th>
+                                        <th>전화번호</th>
+                                        <th>전화번호</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>사용</td>
+                                        <td>운영자</td>
+                                        <td>OPERATOR</td>
+                                        <td>홍길동</td>
+                                        <td>이동전화 암호화</td>
+                                        <td>비암호화</td>
+                                        <td>AAA@wADADF</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>010101010151546</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                    </tr>
+                                    <tr>
+                                        <td>사용</td>
+                                        <td>운영자</td>
+                                        <td>OPERATOR</td>
+                                        <td>홍길동</td>
+                                        <td>이동전화 암호화</td>
+                                        <td>비암호화</td>
+                                        <td>AAA@wADADF</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>010101010151546</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                    </tr>
+                                    <tr>
+                                        <td>사용</td>
+                                        <td>운영자</td>
+                                        <td>OPERATOR</td>
+                                        <td>홍길동</td>
+                                        <td>이동전화 암호화</td>
+                                        <td>비암호화</td>
+                                        <td>AAA@wADADF</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>010101010151546</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                        <td>씨이기술</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        <div class="division">
+                            <h3 class="tit3">상세내역</h3>
+                            <div class="AR">
+                                <a href="#" class="st02 btncom">비활성화</a>
+                                <a href="#" class="st02 btncom">비활성화</a>
+                            </div>
+                        </div>
+                        <table>
+                            <caption>상세 내역</caption>
+                            <colgroup>
+                                <col width="13%"/>
+                                <col width="20%"/>
+                                <col width="13%"/>
+                                <col width="20%"/>
+                                <col width="13%"/>
+                                <col />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th>*input두개</th>
+                                    <td><input type="text" style="width:45%" class="MgR4"><input type="text" style="width:45%"></td>
+                                    <th>비활성화</th>
+                                    <td><input type="text" disabled></td>
+                                    <th>소속</th>
+                                    <td><input type="text" disabled></td>
+                                </tr>
+                                <tr>
+                                    <th>셀렉트박스</th>
+                                    <td>
+                                    	<select>
+                                    		<option value="">1</option>
+                                    		<option value="">1</option>
+                                    	</select>
+                                    </td>
+                                    <th>input + 버튼</th>
+                                    <td><input type="text" style="width:64%;" class="MgR2"><a href="#" class="tbbtn">초기화</a></td>
+                                    <th>*소속</th>
+                                    <td><input type="text"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="AR MgT5">
+                            <a href="#" class="st01 btncom">기본</a>
+                            <a href="#" class="st01 btncom">기본</a>
+                        </div>     
+                        
+                        
+                        
+                        
+                        
+                                           
+                        <div class="division lv2">
+                        	<div class="fl" style="width:60%;">
+                                <h3 class="tit2">분류코드 목록<span>(검색 결과: 0건)</span></h3>
+                                <div class="AR">
+                                    <a href="#" class="st01 btncom">기본</a>
+                                    <a href="#" class="st01 btncom">기본</a>
+                                </div>
+                                
+                                
+                                
+                                
+                                
+                                <!------20171127수정--------->
+                                <div class="hScroll MgT5">
+                                    <table class="tbscroll">
+                                      <thead>
+                                          <tr>
+                                              <th>사용자</th>
+                                              <th>권한등급</th>
+                                              <th>사용자 ID</th>
+                                              <th><a href="#">사용자 이름<img src="../images/asc.png" alt="오름차순" class="sort"/></a></th>
+                                              <th><a href="#">이동전화<img src="../images/des.png" alt="내림차순" class="sort"/></a></th>
+                                              <th>전화번호</th>
+                                              <th>팩스번호</th>
+                                              <th>이메일</th>
+                                              <th>소속</th>
+                                              <th>부서</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                          </tr>
+                                      </thead>
+                                    </table>
+                                    <div class="vScroll-wrap"   style="height:337px;">
+                                        <div class="vScroll">
+                                          <table class="tbscroll">
+                                            <tbody>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>                                
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                	</div>
+                                </div><!--hscoll끝-->
+                                <!------20171127수정끝!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-------->
+
+
+
+
+
+
+                            </div><!--fl끝-->
+                            
+                            
+                        	<div class="fr" style="width:38%">
+                                <h3 class="tit3">상세 내역</h3>
+                                <div class="AR">
+                                    <a href="#" class="st01 btncom">기본</a>
+                                    <a href="#" class="st01 btncom">기본</a>
+                                </div>
+                                <table class="MgT5">
+                                    <caption>사용자 관리</caption>
+                                    <colgroup>
+                                        <col width="30%"/>
+                                        <col />
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>*input두개</th>
+                                            <td><input type="text" style="width:45%" class="MgR4"><input type="text" style="width:45%"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>셀렉트박스 두개</th>
+                                            <td>
+                                                <select style="width:48%">
+                                                    <option value="">1</option>
+                                                    <option value="">1</option>
+                                                </select>
+                                                <select style="width:48%">
+                                                    <option value="">1</option>
+                                                    <option value="">1</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="AR MgT5">
+                                    <a href="#" class="st01 btncom">기본</a>
+                                    <a href="#" class="st01 btncom">기본</a>
+                                </div>     
+                            </div>
+                        </div>  
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <div class="division lv2">
+                        	<div class="fl" style="width:60%;">
+                            <h3>:: 공통코드 목록</h3>
+                                <div class="AR">
+									<span class="selecttit">※사용여부 선택</span>
+                                    <select>
+                                    	<option value="">전체</option>
+                                    	<option value="">전체</option>
+                                    </select>		
+                                </div>
+                                
+                                <!------20171127수정--------->
+                                <div class="hScroll MgT5">
+                                    <table class="tbscroll">
+                                      <thead>
+                                          <tr>
+                                              <th>사용자</th>
+                                              <th>권한등급</th>
+                                              <th>사용자 ID</th>
+                                              <th><a href="#">사용자 이름<img src="../images/asc.png" alt="오름차순" class="sort"/></a></th>
+                                              <th><a href="#">이동전화<img src="../images/des.png" alt="내림차순" class="sort"/></a></th>
+                                              <th>전화번호</th>
+                                              <th>팩스번호</th>
+                                              <th>이메일</th>
+                                              <th>소속</th>
+                                              <th>부서</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                              <th>전화번호</th>
+                                          </tr>
+                                      </thead>
+                                    </table>
+                                    <div class="vScroll-wrap" style="height:223px;">
+                                        <div class="vScroll">
+                                          <table class="tbscroll">
+                                            <tbody>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                              <tr>
+                                                  <td>사용</td>
+                                                  <td>운영자</td>
+    
+                                                  <td>OPERATOR</td>
+                                                  <td>홍길동</td>
+                                                  <td>이동전화 암호화</td>
+                                                  <td>비암호화</td>
+                                                  <td>AAA@wADADF</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>010101010151546</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                                  <td>씨이기술</td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                        </div>
+                               		</div>
+                                </div><!--hscoll끝-->
+                                <!------20171127수정끝!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-------->
+
+
+                            </div>
+                        	<div class="fr" style="width:38%">
+                                <h3 class="tit3">상세 내역</h3>
+                                <div class="AR">
+                                    <a href="#" class="st01 btncom">기본</a>
+                                    <a href="#" class="st01 btncom">기본</a>
+                                </div>
+                                <table class="MgT5">
+                                    <caption>사용자 관리</caption>
+                                    <colgroup>
+                                        <col width="30%"/>
+                                        <col />
+                                    </colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>*input두개</th>
+                                            <td><input type="text" style="width:45%" class="MgR4"><input type="text" style="width:45%"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>셀렉트박스 두개</th>
+                                            <td>
+                                                <select style="width:48%">
+                                                    <option value="">1</option>
+                                                    <option value="">1</option>
+                                                </select>
+                                                <select style="width:48%">
+                                                    <option value="">1</option>
+                                                    <option value="">1</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>*dddd</th>
+                                            <td><input type="text"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="AR MgT5">
+                                    <a href="#" class="st01 btncom">기본</a>
+                                    <a href="#" class="st01 btncom">기본</a>
+                                </div>     
+                            </div>
+                        </div>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                                              
+                    </div><!--#cont끝-->
+                </div><!------subcont2끝-------->
+        	</div><!---------content끝-------->
+        </div><!---------content_wrap끝------> 
+        <div id="footer" class="fullLayout">
+        	<div class="footer_inner contLayout">
+                <span class="copyright">Copyright by Daegu Metropolitan City. All Rights Reserved.</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

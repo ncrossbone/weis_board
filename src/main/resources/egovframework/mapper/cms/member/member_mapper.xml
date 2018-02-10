@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMapper">
+    
+    <sql id="whereMember">
+        <if test="user_id_src != null and user_id_src !=''">
+        AND <![CDATA[A.USER_ID like '%'||#{user_id_src}||'%']]>
+        </if>
+        <if test="user_name_src != null and user_name_src !=''">
+        AND <![CDATA[A.USER_NAME like '%'||#{user_name_src}||'%']]>
+        </if>
+        <if test="comp_src != null and comp_src !=''">
+        AND <![CDATA[A.COMP like '%'||#{comp_src}||'%']]>
+        </if>
+        <if test="email_src != null and email_src !=''">
+        AND <![CDATA[A.EMAIL like '%'||#{email_src}||'%']]>
+        </if>
+        <if test="hp_no_src != null and hp_no_src !=''">
+        AND <![CDATA[A.HP_NO like '%'||#{hp_no_src}||'%']]>
+        </if>
+        <if test="data_use_yn_src != null and data_use_yn_src !=''">
+        	<if test="data_use_yn_src !='all'">
+        		AND <![CDATA[A.DATA_USE_YN = #{data_use_yn_src} ]]>
+        	</if>
+        </if>
+    </sql>
+    
+    <!-- 일반 로그인 -->
+    <select id = "memberLogin" parameterType="Map" resultType="memberVo">
+        <![CDATA[
+			SELECT 
+				A.USER_MNG_SEQ
+				,A.USER_ID
+				,A.USER_PW
+				,A.USER_NAME
+				,A.TEL_NO
+				,A.FAX_NO
+				,A.HP_NO
+				,A.EMAIL
+				,A.COMP
+				,A.DEPT
+				,A.RNKI
+				,A.POSI
+				,A.USER_AUTHO_GRADE
+				,A.DATA_USE_YN
+				,A.FIST_REGI_IP
+				,A.FIST_REGI_USER_MNG_SEQ
+				,A.FIST_REGI_DTTM
+				,A.LAST_UPD_IP
+				,A.LAST_UPD_USER_MNG_SEQ
+				,A.LAST_UPD_DTTM
+			FROM 
+			SYS_LOGIN_USER A
+			WHERE UPPER(A.USER_ID) = UPPER(#{user_id})
+            ]]>
+    </select>
+    
+    <!-- 회원정보 목록 -->
+    <select id="getMemberList" parameterType="Map" resultType="Map">
+        <![CDATA[
+			SELECT 
+				A.USER_MNG_SEQ
+				,A.USER_ID
+				,A.USER_PW
+				,A.USER_NAME
+				,A.TEL_NO
+				,A.FAX_NO
+				,A.HP_NO
+				,A.EMAIL
+				,A.COMP
+				,A.DEPT
+				,A.RNKI
+				,A.POSI
+				,A.USER_AUTHO_GRADE
+				,A.DATA_USE_YN
+				,A.FIST_REGI_IP
+				,A.FIST_REGI_USER_MNG_SEQ
+				,A.FIST_REGI_DTTM
+				,A.LAST_UPD_IP
+				,A.LAST_UPD_USER_MNG_SEQ
+				,A.LAST_UPD_DTTM
+			FROM 
+			SYS_LOGIN_USER A
+			WHERE 1=1
+            ]]>
+	        <include refid="whereMember"/>
+			ORDER BY A.${ORDER_BY} ${ORDER_MODE}
+    </select>
+    
+    <!-- 회원정보 목록 -->
+    <select id="getMemberItem" parameterType="Map" resultType="Map">
+        <![CDATA[
+			SELECT 
+				A.USER_MNG_SEQ
+				,A.USER_ID
+				,A.USER_PW
+				,A.USER_NAME
+				,A.TEL_NO
+				,A.FAX_NO
+				,A.HP_NO
+				,A.EMAIL
+				,A.COMP
+				,A.DEPT
+				,A.RNKI
+				,A.POSI
+				,A.USER_AUTHO_GRADE
+				,A.DATA_USE_YN
+				,A.FIST_REGI_IP
+				,(SELECT USER_NAME FROM SYS_LOGIN_USER WHERE USER_MNG_SEQ = A.FIST_REGI_USER_MNG_SEQ) AS FIST_REGI_USER_NM
+				,A.FIST_REGI_USER_MNG_SEQ
+				,TO_CHAR(A.FIST_REGI_DTTM,'YYYY.MM.DD') AS FIST_REGI_DTTM
+				,A.LAST_UPD_IP
+				,(SELECT USER_NAME FROM SYS_LOGIN_USER WHERE USER_MNG_SEQ = A.LAST_UPD_USER_MNG_SEQ) AS LAST_UPD_USER_NM
+				,A.LAST_UPD_USER_MNG_SEQ
+				,TO_CHAR(A.LAST_UPD_DTTM,'YYYY.MM.DD') AS LAST_UPD_DTTM
+			FROM 
+			SYS_LOGIN_USER A
+			WHERE 1=1
+			AND USER_MNG_SEQ = #{user_mng_seq}
+            ]]>
+    </select>
+    
+    <update id="memberUpdate" parameterType="Map">
+    	UPDATE SYS_LOGIN_USER
+    	SET USER_NAME = #{user_name}
+	        <if test="user_pw != null and user_pw !=''">
+	        ,<![CDATA[USER_PW = #{user_pw}]]>
+	        </if>
+    		,TEL_NO     = #{tel_no}
+    		,FAX_NO		= #{fax_n} 
+			,HP_NO		= #{hp_no}
+			,EMAIL      = #{email}
+			,COMP       = #{comp} 
+			,DEPT       = #{dept} 
+			,RNKI       = #{rnki} 
+			,POSI       = #{posi} 
+			,USER_AUTHO_GRADE = #{user_autho_grade}
+			,DATA_USE_YN	= #{data_use_yn}		 		
+			,LAST_UPD_IP 			= #{processIp}
+			,LAST_UPD_USER_MNG_SEQ 	= #{processId}
+			,LAST_UPD_DTTM 			= SYSDATE
+    	WHERE USER_MNG_SEQ = #{user_mng_seq}
+    </update>
+    
+    <insert id="memberInsert" parameterType="HashMap">
+		<selectKey keyProperty="user_mng_seq" resultType="String" order="BEFORE">
+			SELECT SEQ_SYS_LOGIN_USER.NEXTVAL
+			FROM   DUAL
+		</selectKey>	
+		
+		INSERT INTO SYS_LOGIN_USER(
+			USER_MNG_SEQ
+			,USER_ID
+			,USER_PW
+			,USER_NAME
+			,TEL_NO
+			,FAX_NO
+			,HP_NO
+			,EMAIL
+			,COMP
+			,DEPT
+			,RNKI
+			,POSI
+			,USER_AUTHO_GRADE
+			,DATA_USE_YN
+			,FIST_REGI_IP
+			,FIST_REGI_USER_MNG_SEQ
+			,FIST_REGI_DTTM	
+		) VALUES (
+			#{user_mng_seq}
+			,#{user_id}
+			,#{user_pw}
+			,#{user_name}
+			,#{tel_no}
+			,#{fax_no}
+			,#{hp_no}
+			,#{email}
+			,#{comp}
+			,#{dept}
+			,#{rnki}
+			,#{posi}
+			,#{user_autho_grade}
+			,#{data_use_yn}
+			,#{processIp}
+			,#{processId}
+			,SYSDATE
+		)
+    </insert> 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- 회원정보 관리 카운트 -->
+    <select id="getMemberCount" parameterType="Map" resultType="int">
+        SELECT  
+        COUNT(*) CNT
+        FROM    TB_USER A, TB_BPLC B
+        WHERE A.INSTT_CODE = B.BPLC_NO(+)
+        <include refid="whereMember"/>
+    </select>
+    <!-- 회원정보 관리 조회 -->
+    <select id="getMemberList_back" parameterType="Map" resultType="HashMap">
+		        <![CDATA[SELECT * FROM
+		    (
+		        SELECT ROWNUM AS RNUM, S.* FROM
+		        (
+		                SELECT  
+		                       A.*,
+                            F_GET_CODE_NM('0002',AUTHOR_CODE) AUTHOR_CODE_NM,
+                            F_GET_CODE_NM('0001',INSTT_SE_CODE) INSTT_SE_CODE_NM,
+                            DECODE(A.USE_AT ,'Y','승인','C','승인대기','R','반려','N','삭제','기타') USE_AT_NM,
+                            (CASE 
+                               WHEN INSTT_SE_CODE = '0105'  THEN B.BPLC_NM
+                               WHEN INSTT_SE_CODE = '0106' THEN B.BPLC_NM
+                               ELSE (SELECT INSTT_NM FROM TB_CODE_INSTT    C                  WHERE  C.INSTT_CODE = A.INSTT_CODE)
+                            END) ORG_TIT,
+                            (SELECT (SELECT D.INSTT_NM  FROM TB_CODE_INSTT D  WHERE  D.INSTT_CODE= C.BEST_INSTT_CODE  AND ROWNUM =1) NM FROM TB_CODE_INSTT C WHERE C.INSTT_CL_CODE = '0104' AND C.INSTT_CODE = B.PRMISN_INSTT_CODE  AND ROWNUM =1) AREA1,
+                            (SELECT INSTT_NM  FROM TB_CODE_INSTT WHERE  INSTT_CODE= B.PRMISN_INSTT_CODE AND CO != 1  AND ROWNUM =1) AREA2,
+                            TO_CHAR(A.CREAT_DT, 'YYYY-MM-DD') CREAT_DT_NM
+		                FROM    TB_USER  A, TB_BPLC B
+                    WHERE A.INSTT_CODE = B.BPLC_NO(+)
+                    ]]>
+		        <include refid="whereMember"/>
+		        <![CDATA[ORDER BY USE_AT, A.CREAT_DT DESC
+		        ) S
+		    ORDER BY ROWNUM DESC
+		    )]]>
+		          
+            WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+            ORDER BY RNUM ASC
+		          
+    </select>
+    <!-- 회원 상세 정보 -->
+    <select id ="getMember" parameterType="Map" resultType="HashMap">
+         <![CDATA[
+         SELECT   
+              A.*,
+              SUBSTR(TELNO, 1, INSTR(TELNO, '-', 1, 1) - 1) TELNO1,
+              SUBSTR(TELNO, INSTR(TELNO, '-', 1, 1) + 1, INSTR(TELNO, '-', 1, 2) - INSTR(TELNO, '-', 1, 1) - 1) TELNO2,
+              SUBSTR(TELNO, INSTR(TELNO, '-', 1, 2) + 1) TELNO3,
+              SUBSTR(MBTLNUM, 1, INSTR(MBTLNUM, '-', 1, 1) - 1) MBTLNUM1,
+              SUBSTR(MBTLNUM, INSTR(MBTLNUM, '-', 1, 1) + 1, INSTR(MBTLNUM, '-', 1, 2) - INSTR(MBTLNUM, '-', 1, 1) - 1) MBTLNUM2,
+              SUBSTR(MBTLNUM, INSTR(MBTLNUM, '-', 1, 2) + 1) MBTLNUM3,
+              SUBSTR(BRTHDY, 1, INSTR(BRTHDY, '-', 1, 1) - 1) BRTHDY1,
+              SUBSTR(BRTHDY, INSTR(BRTHDY, '-', 1, 1) + 1, INSTR(BRTHDY, '-', 1, 2) - INSTR(BRTHDY, '-', 1, 1) - 1) BRTHDY2,
+              SUBSTR(BRTHDY, INSTR(BRTHDY, '-', 1, 2) + 1) BRTHDY3,
+              (SELECT BPLC_NM FROM TB_BPLC     WHERE BPLC_NO = INSTT_CODE) TB_BPLC_NM
+        FROM       TB_USER A
+        WHERE USER_ID = #{user_id}
+        ]]>
+    </select>
+    <!-- 회원정보 수정 -->
+    <update id = "updateMember" parameterType="HashMap">
+      UPDATE  TB_USER
+      <set>
+      <if test="INSTT_SE_CODE !=null and INSTT_SE_CODE != ''">
+      INSTT_SE_CODE = #{INSTT_SE_CODE},<!--기관구분코드-->
+      </if>
+      <if test="INSTT_CODE !=null and INSTT_CODE != ''">
+      INSTT_CODE    = #{INSTT_CODE},<!--기관코드-->
+      </if>
+      <if test="AUTHOR_CODE !=null and AUTHOR_CODE!=''">
+      AUTHOR_CODE   = #{AUTHOR_CODE},<!--권한코드-->
+      </if>
+      <if test="PASSWORD !=null and PASSWORD !=''">
+      PASSWORD   = #{PASSWORD},<!--비밀번호-->
+      </if>
+      <if test="USER_NM !=null and USER_NM !=''">
+      USER_NM   = #{USER_NM},<!--이름-->
+      </if>
+      <if test="USE_AT !=null and USE_AT !=''">
+      USE_AT   = #{USE_AT},<!--회원상태-->
+      </if>
+      REJECT_RES   = #{REJECT_RES},<!--반려사유-->
+      BRTHDY        = CONCAT(CONCAT(CONCAT(CONCAT(#{BRTHDY1},'-'),#{BRTHDY2}),'-'),#{BRTHDY3}),<!--생년월일-->
+      TELNO         = CONCAT(CONCAT(CONCAT(CONCAT(#{TELNO1},'-'),#{TELNO2}),'-'),#{TELNO3}),<!--전화번호-->
+      MBTLNUM       = CONCAT(CONCAT(CONCAT(CONCAT(#{MBTLNUM1},'-'),#{MBTLNUM2}),'-'),#{MBTLNUM3}),<!--휴대폰번호-->
+      EMAIL         = #{EMAIL},<!--메일-->
+      CHANGE_DT     = SYSDATE,<!--변경일시-->
+      CHANGER_ID    = #{gUserId},<!--변경자ID-->
+      </set>
+      WHERE USER_ID = #{USER_ID} 
+    </update>
+    
+    <!-- 비밀 번호 변경 >> 추가 로그인 실패 커럼 -->
+    <update id = "passwdChg" parameterType="HashMap">
+        UPDATE  TB_USER set 
+                <if test="pwd != null and pwd !=''">
+		        PASSWORD = #{pwd},
+		        </if>
+		        <if test='failLogin =="Y"'>
+		        LOGIN_FAIL_COUNT = NVL(LOGIN_FAIL_COUNT,0)+1,
+		        </if>
+		        <if test='failLogin =="N"'>
+		        LOGIN_FAIL_COUNT = 0,
+		        </if>
+                CHGE_DATE = SYSDATE 
+        WHERE  MEMBER_ID = #{user_id}
+    </update>
+    
+    <!-- 비밀 번호 초기화 -->
+    <update id="passwdInit" parameterType="HashMap">
+        UPDATE  TB_USER SET 
+          PASSWORD      = #{encPasswd},
+		      CHANGE_DT     = SYSDATE,<!--변경일시-->
+          CHANGER_ID    = NVL(#{gUserId},user_id)<!--변경자ID--> 
+        WHERE USER_ID = #{user_id} 
+    </update>
+    
+    <!-- 회원 상태 변경 -->
+    <update id="userStatChg" parameterType="HashMap">
+        UPDATE  TB_USER SET 
+          USE_AT        = #{USE_AT},
+          REJECT_RES    = #{REJECT_RES},
+		      CHANGE_DT     = SYSDATE,    <!--변경일시-->
+          CHANGER_ID    = #{gUserId}  <!--변경자ID--> 
+        WHERE USER_ID = #{USER_ID} 
+    </update>
+    
+    <!-- 그룹에 속한 관리자 정보를 가져옴 -->
+    <select id="getAuthUrlList" parameterType="Map" resultType="HashMap">
+           SELECT DISTINCT A.MENU_ID, B.CNTNS_TYP ,
+        (CASE WHEN  B.CNTNS_TYP = 'L' THEN B.LINK_URL||'.*' 
+                WHEN  B.CNTNS_TYP = 'H' THEN '/cms/contents/'||'.*'
+                WHEN  B.CNTNS_TYP = 'B' THEN '/cms/board/'||B.BOARD_ID||'/.*'
+            END
+        ) URL
+        FROM TB_MENU_AUTH A, TB_MENU B
+        WHERE A.MENU_ID= B.MENU_ID
+        AND B.CNTNS_TYP != 'D'
+        AND B.MENU_ID IN (
+                          SELECT DISTINCT MENU_ID FROM TB_MENU_AUTH C
+                          WHERE (C.GRP_ID = #{authGrp} OR C.GRP_ID = '0200')
+                          )
+    </select>
+    
+    
+	<!-- id 찾기 -->
+    <select id = "findSearchId" parameterType="HashMap" resultType="HashMap">
+	    <![CDATA[
+        SELECT USER_ID FROM TB_USER
+        WHERE USER_NM = #{userNm}
+        AND   MBTLNUM = CONCAT(CONCAT(CONCAT(CONCAT(#{mbtlnum1},'-'),#{mbtlnum2}),'-'),#{mbtlnum3})
+        ]]> 
+	</select>   
+	<!-- 비밀번호 찾기 -->
+	<select id="findSearchPass" parameterType="HashMap" resultType="HashMap">
+		<![CDATA[
+			SELECT USER_ID FROM TB_USER
+      WHERE USER_NM = #{userNm}
+      AND   USER_ID = #{userId}
+      AND   MBTLNUM = CONCAT(CONCAT(CONCAT(CONCAT(#{mbtlnum1},'-'),#{mbtlnum2}),'-'),#{mbtlnum3})
+		]]>
+	</select>
+  
+  <!-- 아이디 중복 체크 -->
+  <select id="getIdDupCk" parameterType="Map" resultType="int">
+      SELECT  
+      COUNT(*) CNT
+      FROM    TB_USER 
+      WHERE USER_ID = #{user_id}0
+  </select>
+  
+<!--   세션 아이디 조회 -->
+  <select id="getSessionId" parameterType="Map" resultType="HashMap">
+        SELECT SESSION_ID
+        FROM TB_USER A
+        WHERE A.USER_ID= #{user_id}
+    </select>
+    
+    <update id="insertSession" parameterType="HashMap">
+        UPDATE  TB_USER SET 
+        SESSION_ID = #{session_id} 
+        WHERE USER_ID = #{user_id} 
+    </update>
+	
+</mapper>

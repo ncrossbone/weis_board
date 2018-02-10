@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+                http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+    <!-- 로그인 체크가 필요한 URL과 로그인 여부를 체크해줄 인터셉터를 등록한다. -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/cms/**"/>
+            <mvc:exclude-mapping path="/cms/_css/**"/>
+            <mvc:exclude-mapping path="/cms/_js/**"/>
+            <mvc:exclude-mapping path="/cms/_images/**"/>
+            <mvc:exclude-mapping path="/cms/codeUtil/**"/>
+            <bean class="egovframework.common.interceptor.AuthenticInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/mobile/**"/>
+             <mvc:exclude-mapping path="/mobile/_css/**"/>
+            <mvc:exclude-mapping path="/mobile/_js/**"/>
+            <mvc:exclude-mapping path="/mobile/_images/**"/>
+            <mvc:exclude-mapping path="/mobile"/>
+            <mvc:exclude-mapping path="/mobile/"/>
+            <mvc:exclude-mapping path="/mobile/login"/>
+            <mvc:exclude-mapping path="/mobile/login/"/>
+            <mvc:exclude-mapping path="/mobile/loginProc"/>
+            <mvc:exclude-mapping path="/mobile/loginProc/"/>
+            <mvc:exclude-mapping path="/mobile/loginOut"/>
+            <mvc:exclude-mapping path="/mobile/loginOut/"/>
+            <bean class="egovframework.common.interceptor.AuthenticInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>

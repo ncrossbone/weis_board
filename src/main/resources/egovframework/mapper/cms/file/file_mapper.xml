@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fileMapper">
+    <!-- 첨부파일 목록 -->
+    <select id="getFileList" parameterType="Map" resultType="Map">
+		SELECT 
+			A.FILE_ID
+			,A.FILE_REAL_NM
+			,A.FILE_VIRTL_NM
+			,A.FILE_COURS
+			,A.FILE_FRMAT
+			,A.FILE_SN
+		FROM 
+		TCM_ATCHMNFL A
+		WHERE A.FILE_ID = #{ATCHMNFL_ID}
+		AND A.DELETE_AT = 'N'
+    </select>
+    
+    <!-- 첨부파일 목록 -->
+    <select id="getFileItem" parameterType="Map" resultType="Map">
+		SELECT 
+			A.FILE_ID
+			,A.FILE_REAL_NM
+			,A.FILE_VIRTL_NM
+			,A.FILE_COURS
+			,A.FILE_FRMAT
+			,A.FILE_SN
+		FROM 
+		TCM_ATCHMNFL A
+		WHERE A.FILE_ID = #{atchflid}
+		AND A.FILE_SN = #{atchflsn}
+		AND A.DELETE_AT = 'N'
+    </select>
+    
+</mapper>

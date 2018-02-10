@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/jsp/decorators">
+	<!-- 
+		제외될 패턴에 대한 정의 
+		여기서 정의된 패턴은 템플릿이 아닌 실제 Jsp 자체만 노출이 되어 진다. 
+		현재 Ajax 기반으로 Request 되는 부분과 세션처리, 팝업들에 대한 부분이 
+		설정되어 있다.
+	-->
+	<excludes>
+        <pattern>*Ajax</pattern>
+    </excludes>
+		
+	<decorator name="defaultAdmin" page="sys/default.jsp">
+		<pattern>/egov/main/site/*</pattern>
+	</decorator> 
+	
+	<decorator name="contentsAdmin" page="sys/contents.jsp">
+		<pattern>/egov/contents/site/*</pattern>
+	</decorator> 
+	
+	<decorator name="panel" page="panel.jsp"/>
+</decorators>

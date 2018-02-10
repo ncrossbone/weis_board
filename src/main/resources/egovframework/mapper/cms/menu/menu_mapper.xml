@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="menuMapper">
+
+    <sql id="whereMember">
+        <if test="menu_nm_src != null and menu_nm_src !=''">
+        AND <![CDATA[A.MENU_NM like '%'||#{menu_nm_src}||'%']]>
+        </if>
+        <if test="menu_id_src != null and menu_id_src !=''">
+        AND <![CDATA[A.MENU_ID like '%'||#{menu_id_src}||'%']]>
+        </if>
+        <if test="sour_file_nm_src != null and sour_file_nm_src !=''">
+        AND <![CDATA[A.SOUR_FILE_NM like '%'||#{sour_file_nm_src}||'%']]>
+        </if>
+        <if test="data_use_yn_src != null and data_use_yn_src !=''">
+        	<if test="data_use_yn_src !='all'">
+        		AND <![CDATA[A.DATA_USE_YN = #{data_use_yn_src} ]]>
+        	</if>
+        </if>
+    </sql>
+    
+    <!-- 메뉴 정보 리스트 -->
+    <select id="menuList" parameterType="Map" resultType="Map">
+		SELECT 
+			A.DTA_CODE
+			,A.DTA_UPPER_CODE
+			,A.DTA_LEVEL
+			,A.DTA_NM
+			,A.DTA_IDNTFC_ID
+			,A.SEARCH_SKLL_AT
+			,A.DOC_DWLD_AT
+			,A.IMAGE_DWLD_AT
+			,A.LINK_AT
+			,CASE WHEN A.SEARCH_SKLL_AT = 'Y' THEN 'look'
+			    WHEN A.DOC_DWLD_AT = 'Y' THEN 'fDown'
+			    WHEN A.IMAGE_DWLD_AT = 'Y' THEN 'iDown'
+			    WHEN A.LINK_AT = 'Y' THEN 'link'
+			  END VIEW_TYPE
+      		,A.LINK_ADRES
+		FROM TCM_DTA_MASTR A
+		WHERE (A.USE_AT IS NULL OR A.USE_AT = 'Y')
+        <if test="viewOpt != null and viewOpt !='' and viewOpt == 'seq'">
+        AND A.DTA_LEVEL = '3'
+        ORDER BY TO_BINARY_FLOAT(Regexp_Replace(A.DTA_IDNTFC_ID,'-','.'))
+        </if>
+        <if test="viewOpt == null or viewOpt ==''">
+		START WITH A.DTA_UPPER_CODE IS NULL
+		CONNECT BY PRIOR A.DTA_CODE = A.DTA_UPPER_CODE
+		ORDER SIBLINGS BY A.DTA_IDNTFC_ID
+		</if>
+    </select>
+</mapper>

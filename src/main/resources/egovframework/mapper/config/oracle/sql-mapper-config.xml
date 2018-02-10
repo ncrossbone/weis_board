@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+            
+        <setting name="callSettersOnNulls" value="true"/>   <!-- null값인 필드 생략 막기위한 설정 -->
+        <setting name="jdbcTypeForNull" value="NULL" />  <!-- 파라메타 NULL일때 지정 -->
+    </settings>
+    
+    <typeAliases>
+        <typeAlias alias="Map" type="java.util.Map" />
+        <typeAlias alias="HashMap" type="java.util.HashMap" />
+        <typeAlias alias="int" type="java.lang.Integer"/>
+        <typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+        <typeAlias alias="ClobMap" type="egovframework.common.util.ClobMap"/>
+        <typeAlias  alias="memberVo" type="egovframework.cms.member.MemberVo"/>
+        <typeAlias  alias="attachVo" type="egovframework.cms.attach.model.AttachVo"/>
+    </typeAliases>
+</configuration>

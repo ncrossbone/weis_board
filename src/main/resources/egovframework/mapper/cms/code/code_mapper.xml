@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="codeMapper">
+
+    <sql id="whereMember">
+        <if test="comm_cd_div_src != null and comm_cd_div_src !=''">
+        AND <![CDATA[A.COMM_CD_DIV like '%'||#{comm_cd_div_src}||'%']]>
+        </if>
+        <if test="comm_cd_div_nm_src != null and comm_cd_div_nm_src !=''">
+        AND <![CDATA[A.COMM_CD_DIV_NM like '%'||#{comm_cd_div_nm_src}||'%']]>
+        </if>
+        <if test="db_tb_appl_colm_nm_src != null and db_tb_appl_colm_nm_src !=''">
+        AND <![CDATA[A.DB_TB_APPL_COLM_NM like '%'||#{db_tb_appl_colm_nm_src}||'%']]>
+        </if>
+    </sql>
+
+    <!-- 조건에 해당하는 코드 조회 -->
+    <select id="detailCodeList" parameterType="Map" resultType="Map">
+		SELECT 
+			COMM_CD
+			,COMM_CD_NM
+		FROM SYS_COMM_CD_SUB
+		WHERE COMM_CD_DIV = #{comm_cd_div}
+       	<if test="mode != null and mode !='' and mode == 'special'">
+       	AND SUBSTR(COMM_CD, LENGTH(COMM_CD)) = '0'
+       	</if>
+		ORDER BY SORT_NO ASC
+    </select>
+
+    <!-- 시군구 지역구 목록 조회 -->
+    <select id="districtList" parameterType="Map" resultType="Map">
+		SELECT 
+			ADM_CD
+			,DO_NM 
+			,CTY_NM 
+			,DONG_NM 
+			,RI_NM 
+   		FROM COM_DISTRICT_RAW 
+  		WHERE ADM_LVL = #{ADM_LVL}
+       	<if test='ADM_LVL != "1"'>
+      	AND ADM_CD LIKE #{ADM_CD}||'%'
+      	</if>
+  		ORDER BY DO_NM
+    </select>
+    
+    <!-- 수계 목록 조회 -->
+    <select id="waterSysList" parameterType="Map" resultType="Map">
+		SELECT 
+			CODE
+			,CODE_NM
+		FROM TCM_CODE
+		WHERE GROUP_CODE = '0002'
+		ORDER BY CODE
+    </select>
+    
+    <!-- 수계 하위 목록 조회 -->
+    <select id="waterSysSubList" parameterType="Map" resultType="Map">
+    	SELECT 
+			A.UPPER_CODE
+			,(SELECT CODE_NM FROM TCM_CODE X WHERE X.GROUP_CODE = '0002' AND X.CODE = A.UPPER_CODE) UPPER_NM
+			,A.CODE
+			,A.CODE_NM
+		FROM TCM_CODE A
+		WHERE GROUP_CODE = '0003'
+			AND USE_AT = 'Y'
+			AND CODE_LEVEL = 2
+		<if test='UPPER_CODE != null and UPPER_CODE != ""'>
+			AND UPPER_CODE = #{UPPER_CODE}
+		</if>
+		ORDER BY CODE
+    </select>
+    
+    <!-- 년도 최대 최소 조회기간 조회(param : 테이블/뷰 명, 해당 테이블 년도 컬럼 명) -->
+    <select id="dateYearList" parameterType="Map" resultType="Map">
+    	<![CDATA[
+		SELECT TO_CHAR(TO_DATE(B.MAX_WMYR,'YYYY'), 'YYYY')-LEVEL+1 AS YEAR 
+		FROM 
+		DUAL A
+		,(SELECT 
+		MIN(SUBSTR(${YEAR_COL_NM}, 1,4)) AS MIN_WMYR
+		,MAX(SUBSTR(${YEAR_COL_NM}, 1,4)) AS MAX_WMYR
+		,MAX(SUBSTR(${YEAR_COL_NM}, 1,4))-MIN(SUBSTR(${YEAR_COL_NM}, 1,4)) AS RS_WMYR
+		FROM ${FROM_NM}) B
+		CONNECT BY LEVEL <= ((TO_CHAR(TO_DATE(B.MAX_WMYR,'YYYY'),'YYYY')+1)-TO_NUMBER(TO_CHAR(TO_DATE(B.MAX_WMYR,'YYYY'), 'YYYY')-B.RS_WMYR, '9999'))
+		]]>
+    </select>
+    
+    <!-- 보 목록 조회 -->
+    <select id="boList" parameterType="Map" resultType="Map">
+		SELECT 
+			BOOBSCD
+			,OBSNM
+		FROM BOOBSIF
+    </select>
+    
+</mapper>

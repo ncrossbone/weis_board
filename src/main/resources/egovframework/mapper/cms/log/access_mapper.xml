@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="accessLogMapper">
+	<!-- 접속 로그 저장 -->
+	<insert id="insertAccessLog" parameterType="Map">
+	    <selectKey keyProperty="LOG_ID" resultType="int" order="BEFORE">
+	        SELECT ACES_LOG_SEQ.NEXTVAL  FROM  DUAL
+	    </selectKey>
+	    <!--  순번,  로그구분 1:방문,2:로그인,  로그 설명,  접속일자,  접속자ID,  접속자IP -->
+	    INSERT INTO TB_ACES_LOG 
+	    ( LOG_ID, LOG_GUBN, LOG_DESC, CREAT_DT, CRTR_ID, CRTR_IP )
+	    VALUES 
+	    ( #{LOG_ID}, #{LOG_GUBN}, #{LOG_DESC}, SYSDATE, #{CRTR_ID}, #{CRTR_IP} )
+	</insert>
+	<sql id="accessLogListWehere">
+	    <if test="startDay != null and endDay != null">AND CREAT_DT BETWEEN TO_DATE(#{startDay},'YYYY-MM-DD') AND TO_DATE(#{endDay},'YYYY-MM-DD')+1</if>
+	    <if test="CRTR_ID != null and CRTR_ID != ''">AND CRTR_ID = #{gUserId}</if>
+	    <if test="LOG_GUBN != null and LOG_GUBN != ''">AND LOG_GUBN =  #{LOG_GUBN}</if> 
+	</sql>
+	<!-- 접속 리스트 -->
+	<select id="getAccessLogList" parameterType="Map" resultType="HashMap">
+	    SELECT * FROM (
+	                SELECT ROWNUM RNUM, AA.* FROM (
+	                    SELECT LOG_ID, LOG_DESC, CRTR_ID, CRTR_IP, LOG_GUBN, DECODE(LOG_GUBN,'1','최초접속','2','로그인접속') LOG_GUBN_NM,
+		    TO_CHAR(CREAT_DT,'YYYY-MM-DD HH24:MI:SS') CREAT_DT
+		    FROM TB_ACES_LOG
+		    WHERE 1 = 1
+	                    <include refid="accessLogListWehere"/>
+	                    ORDER BY LOG_ID DESC
+	                ) AA
+	            )
+	    WHERE RNUM BETWEEN #{startRow} AND #{endRow}
+	</select>
+	<!-- 접속 카운트 -->
+	<select id="getAccessLogCount" parameterType="Map" resultType="int">
+	    SELECT COUNT(*) CNT
+	    FROM TB_ACES_LOG
+	    WHERE 1 = 1
+	    <include refid="accessLogListWehere"/>
+	</select>
+</mapper>

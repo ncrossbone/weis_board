@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fileBoardMapper">
+
+    <!-- 조건에 해당하는 코드 조회 -->
+    <select id="descriptionList" parameterType="Map" resultType="Map">
+		SELECT
+			A.DOC_NO
+			,A.DTA_CODE
+			,A.DOC_SJ
+			,A.DOC_SUMRY
+			,A.DOC_CNTNT
+			,SUBSTR(A.DOC_PBLICTE_DE,0,7) AS DOC_PBLICTE_DE
+			,A.ATCHMNFL_ID
+      		,A.DOC_PBLICTE_INSTT_NM
+		FROM TCM_DOC_INFO A
+		WHERE A.USE_AT = 'Y'
+		AND A.DTA_CODE = #{dta_code} 
+        <if test="startDate != null and startDate !=''">
+        AND REPLACE(DOC_PBLICTE_DE,'.','-') BETWEEN #{startDate} AND #{endDate}
+        </if>		
+        <if test="doc_sj != null and doc_sj !=''">
+        AND A.DOC_SJ like '%'||#{doc_sj}||'%'
+        </if>		
+    </select>
+    
+    <!-- 드론 사진, 항공 사진 정보 카운팅 -->
+    <select id="imgFileCount" parameterType="Map" resultType="int">
+	    SELECT 
+			COUNT(*)		  
+		FROM 
+			${tableNm} A
+			,(
+			  SELECT BRRER_CODE, MIN(POTOGRF_DE) AS POTOGRF_DE, MIN(SPOT_CODE) AS SPOT_CODE FROM 
+			  ${tableNm} A
+			  GROUP BY A.BRRER_CODE
+			) B
+		WHERE A.BRRER_CODE = B.BRRER_CODE
+		AND A.POTOGRF_DE = B.POTOGRF_DE
+		AND A.SPOT_CODE = B.SPOT_CODE
+		ORDER BY A.BRRER_CODE
+    </select>
+    
+    <select id="imgFileList" parameterType="Map" resultType="Map">
+	    SELECT * FROM (
+			SELECT ROWNUM RNUM, AA.* FROM (    
+				SELECT 
+					A.SPOT_CODE
+					,A.BRRER_CODE
+					,A.FILE_REAL_NM
+					,A.WRSSM_NM
+					,A.BRRER_NM
+					,A.SPOT_NM
+					,A.POTOGRF_DE
+					,A.PARTCLR_MATTER
+		      		,A.FILE_FRMAT
+				FROM 
+					${tableNm} A
+					,(
+					  SELECT BRRER_CODE, MIN(POTOGRF_DE) AS POTOGRF_DE, MIN(SPOT_CODE) AS SPOT_CODE FROM 
+					  ${tableNm} A
+					  GROUP BY A.BRRER_CODE
+					) B
+				WHERE A.BRRER_CODE = B.BRRER_CODE
+				AND A.POTOGRF_DE = B.POTOGRF_DE
+				AND A.SPOT_CODE = B.SPOT_CODE
+				ORDER BY A.BRRER_CODE	
+			) AA
+        )
+	    WHERE RNUM BETWEEN #{startRow} AND #{endRow}	
+    </select>
+    
+    <!-- 드론 사진, 항공 사진 정보 검색 카운팅 -->
+    <select id="imgSrcFileCount" parameterType="Map" resultType="int">
+	    SELECT 
+			COUNT(*)		  
+		FROM 
+			${tableNm} A
+		WHERE 1 = 1 
+   		<if test="bo_src != null and bo_src !=''">
+		AND A.BRRER_CODE = #{bo_src}
+		</if>
+   		<if test="area_nm != null and area_nm !=''">
+		AND A.SPOT_NM like '%'||#{area_nm}||'%'
+		</if>
+    </select>
+    
+    <select id="imgSrcFileList" parameterType="Map" resultType="Map">
+	    SELECT * FROM (
+			SELECT ROWNUM RNUM, AA.* FROM (    
+				SELECT 
+					A.SPOT_CODE
+					,A.BRRER_CODE
+					,A.FILE_REAL_NM
+					,A.WRSSM_NM
+					,A.BRRER_NM
+					,A.SPOT_NM
+					,A.POTOGRF_DE
+					,A.PARTCLR_MATTER
+		      		,A.FILE_FRMAT
+				FROM 
+					${tableNm} A
+				WHERE 1 = 1 
+        		<if test="bo_src != null and bo_src !=''">
+				AND A.BRRER_CODE = #{bo_src}
+				</if> 
+        		<if test="area_nm != null and area_nm !=''">
+				AND A.SPOT_NM like '%'||#{area_nm}||'%'
+				</if>
+			) AA
+        )
+	    WHERE RNUM BETWEEN #{startRow} AND #{endRow}	
+    </select>
+    
+    <select id="getFileItem" parameterType="Map" resultType="Map">
+		SELECT 
+			A.FILE_COURS
+			,A.FILE_VIRTL_NM
+			,A.FILE_REAL_NM
+			,A.FILE_FRMAT
+		FROM 
+			${tableNm} A
+		WHERE A.SPOT_CODE = #{spot_code}
+		AND A.BRRER_CODE = #{brrer_code}
+		AND A.POTOGRF_DE = #{potogrf_de}
+    </select>
+    
+    <select id="zipFileList" parameterType="Map" resultType="Map">
+		SELECT 
+			A.FILE_COURS
+			,A.BRRER_NM
+			,A.FILE_VIRTL_NM
+			,A.FILE_REAL_NM
+			,A.FILE_FRMAT
+			,A.SPOT_CODE
+			,A.BRRER_CODE
+			,A.POTOGRF_DE
+		FROM 
+			${tableNm} A
+		WHERE A.BRRER_CODE = #{brrer_code}
+		ORDER BY A.POTOGRF_DE ASC
+    </select>
+</mapper>

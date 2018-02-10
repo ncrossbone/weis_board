@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+	<tlib-version>1.0</tlib-version>
+	<short-name>hana</short-name>
+	<uri>http://localhost/tld/hana.tld</uri>
+	
+	<function>
+        <description>
+            문자열을 바이트 단위로 자르기. 바이트를 초과할 경우 ... 붙히기.
+        </description>
+        <name>leftKor</name>
+        <function-class>
+        egovframework.common.util.StringUtil
+        </function-class>
+        <function-signature>
+        java.lang.String leftKor( java.lang.String, int )
+        </function-signature>
+        <example>
+        ${hana:leftKor(myString, 10)}
+        </example>
+    </function>
+	<function>
+        <description>
+            특정일자의 요일 가져오기
+        </description>
+        <name>getDay</name>
+        <function-class>
+        egovframework.common.util.StringUtil
+        </function-class>
+        <function-signature>
+        java.lang.String getDay( java.lang.Object, java.lang.Object, java.lang.Object)
+        </function-signature>
+        <example>
+        ${hana:getDay(myString, myString, myString)}
+        </example>
+    </function>
+	<function>
+        <description>
+            특정일자의 요일 가져오기
+        </description>
+        <name>getDay2</name>
+        <function-class>
+        egovframework.common.util.StringUtil
+        </function-class>
+        <function-signature>
+        java.lang.String getDay( java.lang.String)
+        </function-signature>
+        <example>
+        ${hana:getDay2(myString)}
+        </example>
+    </function>
+	
+	<function>
+		<description>
+		태그 \n -> <br />로 바꾸기
+		</description>
+		<name>htmlEncode</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.String htmlEncode( java.lang.Object )
+		</function-signature>
+		<example>
+		${hana:htmlEncode(myString)}
+		</example>
+	</function>
+	
+	
+	<function>
+		<description>
+		파일명(String)에 대해 이미지인지 체크해서 true/false 리턴
+		</description>
+		<name>isImage</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.Boolean isImage( java.lang.Object )
+		</function-signature>
+		<example>
+		${hana:isImage(item.file1Nm)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		파일명에 대해 해당 아이콘(이미지)의 풀패스 리턴<br/>
+		&lt;img src="/images/common/fileExt/xxx.gif"/&gt;
+		</description>
+		<name>getFileIcon</name>
+		<function-class>
+		egovframework.common.util.WebUtil
+		</function-class>
+		<function-signature>
+		java.lang.String getFileIcon( java.lang.Object )
+		</function-signature>
+		<example>
+		${hana:getFileIcon(item.file1Nm)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		VARCHAR 타입의 날짜를 해당 포맷(yyyy.mm.dd hh:mm:ss)으로 리턴
+		</description>
+		<name>convertDt</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.String convertDt( java.lang.Object )
+		</function-signature>
+		<example>
+		${hana:convertDt(item.fromDt)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		VARCHAR 타입의 시각을 해당 포맷(hh:mm:ss)으로 리턴
+		</description>
+		<name>convertTm</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.String convertTm( java.lang.Object )
+		</function-signature>
+		<example>
+		${hana:convertTm(item.fromHm)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		날짜 차이 구하기
+		</description>
+		<name>dateDiff</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.Integer dateDiff( java.util.Date, java.util.Date, java.lang.String )
+		</function-signature>
+		<example>
+		${hana:dateDiff(item.fromDt, item.endDt, "d")}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		String(yyyyMMdd)를 포맷형식( %Y:년도4자리, %y:년도2자리, %M, %D, %m, %d )에 따라 출력
+		</description>
+		<name>toStrDate</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.String toStrDate( java.lang.String, java.lang.String )
+		</function-signature>
+		<example>
+		${hana:toStrDate(item.fromDt, "%Y%M%D")}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		JSTL 나누기 : 소수점이 안나옴?
+		</description>
+		<name>divideFloat</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.Float divideFloat( java.lang.Float, java.lang.Float )
+		</function-signature>
+		<example>
+		${hana:getFloat(1,2)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		초간단 XOR 함수. 이메일주소 등 사용 
+		</description>
+		<name>encodeXor</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.String encodeXor( java.lang.String )
+		</function-signature>
+		<example>
+		${hana:encodeXor("john@unknown.com")}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		숫자값에 대해 앞에 0 붙히기 
+		</description>
+		<name>toStrZero</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.String toStrZero( int, int )
+		</function-signature>
+		<example>
+		${hana:toStrZero(1, 2)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		날짜(Date) 가감하기
+		</description>
+		<name>dateAdd</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.util.Date dateAdd( java.util.Date, java.lang.String, int )
+		</function-signature>
+		<example>
+		${hana:dateAdd(item.regSd, "d", 10)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		스프링 HtmlUtils.htmlEscape()
+		</description>
+		<name>htmlEscape</name>
+		<function-class>
+		org.springframework.web.util.HtmlUtils
+		</function-class>
+		<function-signature>
+		java.lang.String htmlEscape( java.lang.String )
+		</function-signature>
+		<example>
+		${hana:htmlEscape(item.myText)}
+		</example>
+	</function>
+	
+	<function>
+		<description>
+		String.replaceAll
+		</description>
+		<name>replaceAll</name>
+		<function-class>
+		egovframework.common.util.StringUtil
+		</function-class>
+		<function-signature>
+		java.lang.String replaceAll( java.lang.String, java.lang.String, java.lang.String )
+		</function-signature>
+		<example>
+		${hana:replaceAll('asdf123', '\\d', 'abc')}
+		</example>
+	</function>
+	
+	<tag>
+		<name>url</name>
+		<tag-class>egovframework.common.tags.UrlTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>URL tag based on the JSTL c:url tag.  This variant is fully 
+		backwards compatible with the standard tag.  Enhancements include support 
+		for URL template parameters.</description>
+		<attribute>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>The URL to build.  This value can include template place holders 
+			that are replaced with the URL encoded value of the named parameter.  Parameters 
+			must be defined using the param tag inside the body of this tag.</description>
+		</attribute>
+		<attribute>
+			<name>context</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>Specifies a remote application context.  The default is the 
+			current application context.</description>
+		</attribute>
+		<attribute>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>The name of the variable to export the URL value to.</description>
+		</attribute>
+		<attribute>
+			<name>scope</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>The scope for the var.  'application', 'session', 'request' and 
+			'page' scopes are supported.  Defaults to page scope.  This attribute has no 
+			effect unless the var attribute is also defined.</description>
+		</attribute>
+		<attribute>
+			<name>htmlEscape</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>Set HTML escaping for this tag, as boolean value. Overrides the
+			default HTML escaping setting for the current page.</description>
+		</attribute>
+		<attribute>
+			<name>javaScriptEscape</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>Set JavaScript escaping for this tag, as boolean value.
+			Default is false.</description>
+		</attribute>
+		<attribute>
+			<name>escapeAmp</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>(&amp;)를 (&amp;amp;)로 바꿀것인가? 기본값은 true.</description>
+		</attribute>
+		<attribute>
+			<name>includeParams</name>
+			<required>false</required>
+			<rtexprvalue>get</rtexprvalue>
+			<description>기본적으로 파라미터를 받은것인가? 사실 그 외는 전부 무시됨. 구현 안함. :P 기본값은 get.</description>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>param</name>
+		<tag-class>egovframework.common.tags.ParamTag</tag-class>
+		<body-content>JSP</body-content>
+		<description>Parameter tag based on the JSTL c:param tag.  The sole purpose is to 
+		support params inside the spring:url tag.</description>
+		<attribute>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>The name of the parameter.</description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>The value of the parameter.</description>
+		</attribute>
+	</tag>
+</taglib>

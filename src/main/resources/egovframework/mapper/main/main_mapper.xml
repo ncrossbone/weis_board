@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mainMapper">
+
+    <sql id="whereMember">
+        <if test="comm_cd_div_src != null and comm_cd_div_src !=''">
+        AND <![CDATA[A.COMM_CD_DIV like '%'||#{comm_cd_div_src}||'%']]>
+        </if>
+        <if test="comm_cd_div_nm_src != null and comm_cd_div_nm_src !=''">
+        AND <![CDATA[A.COMM_CD_DIV_NM like '%'||#{comm_cd_div_nm_src}||'%']]>
+        </if>
+        <if test="db_tb_appl_colm_nm_src != null and db_tb_appl_colm_nm_src !=''">
+        AND <![CDATA[A.DB_TB_APPL_COLM_NM like '%'||#{db_tb_appl_colm_nm_src}||'%']]>
+        </if>
+    </sql>
+
+    <!-- 경관 드론 촬영 -->
+    <select id="drone_MainGridList" parameterType="Map" resultType="Map">
+		 SELECT ROWNUM AS PAGE,POTOGRF_DE,PATHS,PARTCLR_MATTER,RESZ_2_VIRTL_NM AS FILENAME 
+  		   FROM (SELECT FILE_COURS AS PATHS, POTOGRF_DE, NVL(PARTCLR_MATTER,' ') AS PARTCLR_MATTER, RESZ_2_VIRTL_NM, FILE_FRMAT
+   		  		   FROM TCM_ATCHMNFL A,
+        	   	  (SELECT A.FILE_ID, A.POTOGRF_DE, A.PARTCLR_MATTER
+           		  	 FROM TSC_DRONE_PHODTA A,
+                          TSC_DRONE_PHOSPOT B,
+                          TCM_BRRER_MAPNG C
+          	     	WHERE A.SPOT_CODE = B.SPOT_CODE
+                      AND SUBSTR(B.SPOT_CODE,1,7) =  C.BRRER_CODE
+                      AND B.BRRER_REPRSNT_AT ='Y'
+            	   	  AND C.BRRER_REPRSNT_SPOT_CODE = #{ptNo}
+         		  ) B
+  		 WHERE A.FILE_ID = B.FILE_ID
+      ORDER BY POTOGRF_DE DESC
+                )
+  	              
+    </select>
+    
+     <!-- 경관 항공 촬영 -->
+    <select id="flight_MainGridList" parameterType="Map" resultType="Map">
+		 SELECT ROWNUM AS PAGE, POTOGRF_DE, PATHS, PARTCLR_MATTER,RESZ_2_VIRTL_NM AS FILENAME 
+  		   FROM (SELECT FILE_COURS AS PATHS, POTOGRF_DE, NVL(PARTCLR_MATTER,' ') AS PARTCLR_MATTER, RESZ_2_VIRTL_NM,FILE_FRMAT
+   		  		   FROM TCM_ATCHMNFL A,
+        	   	  (SELECT A.FILE_ID, A.POTOGRF_DE, A.PARTCLR_MATTER
+           		  	 FROM TSC_FLIGHT_PHODTA A,
+                          TSC_FLIGHT_PHOSPOT B,
+                          TCM_BRRER_MAPNG C
+          	     	WHERE A.SPOT_CODE = B.SPOT_CODE
+                      AND SUBSTR(B.SPOT_CODE,1,7) =  C.BRRER_CODE
+                      AND B.BRRER_REPRSNT_AT ='Y'
+            	   	  AND C.BRRER_REPRSNT_SPOT_CODE = #{ptNo}
+         		  ) B
+  		 WHERE A.FILE_ID = B.FILE_ID
+      ORDER BY POTOGRF_DE DESC
+                )
+  	              
+    </select>
+    
+    <!-- 보 운영현황 -->
+    <select id="bomst_MainGridList" parameterType="Map" resultType="Map">
+	    SELECT PAGE,ITEM_NAME,NVL(TO_CHAR(ITEM_VALUE),<![CDATA['&nbsp']]>) AS ITEM_VALUE,DATES,TIMES
+	      FROM (SELECT RN AS PAGE,
+	       	  	  CASE NUM WHEN 1 THEN 'BOMST_SWL'
+	                       WHEN 2 THEN 'BOMST_OWL'
+		                   WHEN 3 THEN 'BOMST_SFW'
+		                   WHEN 4 THEN 'BOMST_TOTOTF'
+		                   WHEN 5 THEN 'BOMST_INF'
+		                   WHEN 6 THEN 'BOMST_EGOTF'
+		                   WHEN 7 THEN 'BOMST_GTOTF'
+		                   WHEN 8 THEN 'BOMST_CBOTF'
+		                   WHEN 9 THEN 'BOMST_FWOTF'
+		                   WHEN 10 THEN 'BOMST_ETCOTF' END AS ITEM_NAME,
+		          CASE NUM WHEN 1 THEN SWL  
+		                   WHEN 2 THEN OWL
+		                   WHEN 3 THEN SFW
+		                   WHEN 4 THEN TOTOTF
+		                   WHEN 5 THEN INF
+		                   WHEN 6 THEN EGOTF
+		                   WHEN 7 THEN GTOTF
+		                   WHEN 8 THEN CBOTF
+		                   WHEN 9 THEN FWOTF
+		                   WHEN 10 THEN ETCOTF END AS ITEM_VALUE,
+	          	 DATES,TIMES
+			      FROM (SELECT RN,SWL,OWL,SFW,TOTOTF,INF,EGOTF,GTOTF,CBOTF,FWOTF,ETCOTF,SUBSTR(YMDHM,1,4)||'.'||SUBSTR(YMDHM,5,2)||'.'||SUBSTR(YMDHM,7,2) AS DATES, SUBSTR(YMDHM,9,2)||':'||SUBSTR(YMDHM,11,2) AS TIMES
+	           			  FROM (SELECT SWL,OWL,SFW,TOTOTF,INF,EGOTF,GTOTF,CBOTF,FWOTF,ETCOTF,YMDHM,ROWNUM AS RN
+	                   		      FROM (SELECT /*+INDEX(BOMST BOMST_I03)*/ *
+	                           			  FROM BOMST
+	                           			 WHERE YMDHM >=TO_CHAR(ADD_MONTHS(SYSDATE, -2), 'YYYYMMDDHH24MI')
+	                        	  		) A,
+	                        	 		TCM_BRRER_MAPNG B
+	                 			 WHERE A.BOOBSCD = B.BRRER_CODE
+	                    	  	   AND B.BRRER_REPRSNT_SPOT_CODE = #{ptNo}
+	                 	  		) A
+	          	   		 WHERE RN <![CDATA[<]]> 6
+	        			) A,
+	        			(SELECT ROWNUM AS NUM
+	           	   		   FROM DICTIONARY 
+	          	  		  WHERE ROWNUM <![CDATA[<]]> 11
+	           			 ) B
+				ORDER BY DATES DESC, NUM
+			)
+    </select>
+    
+    <!-- 퇴적물 측정망 운영 -->
+    <select id="sdm_MainGridList" parameterType="Map" resultType="Map">
+		SELECT PAGE,ITEM_NAME,NVL(ITEM_VALUE,<![CDATA['&nbsp']]>) AS ITEM_VALUE,DATES
+		  FROM (SELECT RN AS PAGE,
+			   		   CASE NUM WHEN 1 THEN 'SDM_POLL_STEP'
+		                		WHEN 2 THEN 'SDM_PCA'
+				                WHEN 3 THEN 'SDM_TN'
+				                WHEN 4 THEN 'SDM_TP'
+				                WHEN 5 THEN 'SDM_CU'
+				                WHEN 6 THEN 'SDM_PB'
+				                WHEN 7 THEN 'SDM_NI'
+				                WHEN 8 THEN 'SDM_AS'
+				                WHEN 9 THEN 'SDM_HG'
+				                WHEN 10 THEN 'SDM_ZN'
+				                WHEN 11 THEN 'SDM_CD'
+				                WHEN 12 THEN 'SDM_CR' END AS ITEM_NAME,
+		       		   CASE NUM WHEN 1 THEN POLL_STEP  
+				                WHEN 2 THEN TO_CHAR(ITEM_PCA)
+				                WHEN 3 THEN TO_CHAR(ITEM_TN)
+				                WHEN 4 THEN TO_CHAR(ITEM_TP)
+				                WHEN 5 THEN TO_CHAR(ITEM_CU)
+				                WHEN 6 THEN TO_CHAR(ITEM_PB)
+				                WHEN 7 THEN TO_CHAR(ITEM_NI)
+				                WHEN 8 THEN TO_CHAR(ITEM_AS)
+				                WHEN 9 THEN TO_CHAR(ITEM_HG)
+				                WHEN 10 THEN TO_CHAR(ITEM_ZN)
+				                WHEN 11 THEN TO_CHAR(ITEM_CD)
+				                WHEN 12 THEN TO_CHAR(ITEM_CR) END AS ITEM_VALUE,
+		       				DATES 
+  			   			FROM (SELECT ROWNUM AS RN,WMSD AS DATES,POLL_STEP,ITEM_PCA,ITEM_TN,ITEM_TP,ITEM_CU,ITEM_PB,ITEM_NI,ITEM_AS,ITEM_HG,ITEM_ZN,ITEM_CD,ITEM_CR
+          			   			FROM (SELECT WMSD,POLL_STEP,ITEM_PCA,ITEM_TN,ITEM_TP,ITEM_CU,ITEM_PB,ITEM_NI,ITEM_AS,ITEM_HG,ITEM_ZN,ITEM_CD,ITEM_CR
+                  			   			FROM SDM_RWMPT A,
+                       		        		 SDM_RWMDTI B
+                 			  		   WHERE A.PT_NO = B.PT_NO
+                   			    	     AND A.EFIS_PT_NO = #{ptNo}
+              			   		    ORDER BY WMSD DESC
+               						  )
+         			  		   WHERE ROWNUM <![CDATA[<]]> 6
+       						 ) A,
+       						 (SELECT ROWNUM AS NUM
+          			   			FROM DICTIONARY
+         			  		   WHERE ROWNUM <![CDATA[<]]> 13
+       						 ) B
+			ORDER BY DATES DESC, NUM
+		)
+    </select>
+    <!-- 수질예보제 -->
+    <select id="ag_MainGridList" parameterType="Map" resultType="Map">
+		SELECT PAGE,DATES,ITEM_NAME,DECODE(ITEM_VALUE, 888888888, '분석중', 999999999, '정량한계미만',NULL,<![CDATA['&nbsp']]>,ITEM_VALUE) AS ITEM_VALUE
+  		  FROM (SELECT RN AS PAGE,DATES,
+               		   CASE NUM WHEN 1 THEN 'AG_TEMP'
+		                        WHEN 2 THEN 'AG_DOC'
+		                        WHEN 3 THEN 'AG_EC'
+		                        WHEN 4 THEN 'AG_AVERAGE_CLOA'
+		                        WHEN 5 THEN 'AG_BLUE_GREEN_ALGAE'
+		                        WHEN 6 THEN 'AG_COD'
+                                WHEN 7 THEN 'AG_TP'
+		                        END AS ITEM_NAME,
+		               CASE NUM WHEN 1 THEN TO_CHAR(ITEM_TEMP)
+		                        WHEN 2 THEN TO_CHAR(ITEM_DOC)
+		                        WHEN 3 THEN TO_CHAR(ITEM_EC)
+		                        WHEN 4 THEN TO_CHAR(ITEM_AVERAGE_CLOA)
+		                        WHEN 5 THEN TO_CHAR(ITEM_BLUE_GREEN_ALGAE)
+		                        WHEN 6 THEN TO_CHAR(ITEM_COD)
+                                WHEN 7 THEN TO_CHAR(ITEM_TP)
+		                        END AS ITEM_VALUE
+          		  FROM (SELECT ROWNUM AS RN,WMYMD AS DATES,ITEM_TEMP,ITEM_DOC,ITEM_EC,ITEM_AVERAGE_CLOA,ITEM_BLUE_GREEN_ALGAE,ITEM_COD,ITEM_TP 
+                  		  FROM (SELECT B.WMYMD,ITEM_TEMP,ITEM_DOC,ITEM_EC,ITEM_AVERAGE_CLOA,ITEM_BLUE_GREEN_ALGAE,ITEM_COD,ITEM_TP
+                          		  FROM AG_RWMDTI_NEW A,
+                               		   AG_RWMDTD B
+                         	     WHERE A.PT_NO = B.PT_NO
+                           		   AND A.WMYR = B.WMYR
+                           		   AND A.WMOD = B.WMOD
+                           		   AND A.WMWK = B.WMWK
+                           		   AND A.PT_NO = #{ptNo}
+                      		  ORDER BY B.WMYMD DESC
+                        		)
+                 		 WHERE ROWNUM <![CDATA[<]]> 6
+               		   ) A,
+               		  (SELECT ROWNUM AS NUM
+                  		 FROM DICTIONARY
+                 		WHERE ROWNUM <![CDATA[<]]> 8
+               		  ) B
+		ORDER BY DATES DESC, NUM
+   		)
+    </select>
+    <!-- 수심별 정밀조사 -->
+    <select id="dep_MainGridList" parameterType="Map" resultType="Map">
+		SELECT PAGE,DATES,WMDEP,NVL(ITEM_TEMP,<![CDATA['&nbsp']]>) AS ITEM_TEMP,NVL(ITEM_PH,<![CDATA['&nbsp']]>) AS ITEM_PH,NVL(ITEM_DOC,<![CDATA['&nbsp']]>) AS ITEM_DOC,NVL(ITEM_EC,<![CDATA['&nbsp']]>) AS ITEM_EC,NVL(ITEM_CLOA,<![CDATA['&nbsp']]>) AS ITEM_CLOA
+  	      FROM (SELECT RANK() OVER(PARTITION BY PT_NO, WMDEP ORDER BY WMYMD DESC) PAGE ,WMYMD AS DATES,TO_NUMBER(WMDEP) AS WMDEP,TO_CHAR(ITEM_TEMP) AS ITEM_TEMP,TO_CHAR(ITEM_PH) AS ITEM_PH,TO_CHAR(ITEM_DOC) AS ITEM_DOC , TO_CHAR(ITEM_EC) AS ITEM_EC , TO_CHAR(ITEM_CLOA) AS ITEM_CLOA
+          		  FROM DEP_RWMDT
+         	     WHERE PT_NO = #{ptNo}
+       			)
+ 		 WHERE PAGE <![CDATA[<]]> 6
+      ORDER BY WMDEP
+    </select>
+    <!-- 자동측정망 -->
+    <select id="five_MainGridList" parameterType="Map" resultType="Map">
+		SELECT PAGE,SUBSTR(MSR_DATE,1,10) AS DATES,SUBSTR(MSR_DATE,11,6) AS TIMES,
+       		   CASE NUM WHEN 1 THEN 'FIVE_TEMP'
+                	 	WHEN 2 THEN 'FIVE_PH'
+                		WHEN 3 THEN 'FIVE_EC'
+		                WHEN 4 THEN 'FIVE_DO'
+		                WHEN 5 THEN 'FIVE_TOC'
+		                WHEN 6 THEN 'FIVE_TN'
+		                WHEN 7 THEN 'FIVE_TP'
+		                WHEN 8 THEN 'FIVE_NTU' END AS ITEM_NAME,
+       		   CASE NUM WHEN 1 THEN NVL(FIVE_TEMP,<![CDATA['&nbsp']]>)
+                		WHEN 2 THEN NVL(FIVE_PH,<![CDATA['&nbsp']]>)
+                		WHEN 3 THEN NVL(FIVE_EC,<![CDATA['&nbsp']]>)
+                		WHEN 4 THEN NVL(FIVE_DO,<![CDATA['&nbsp']]>)
+                		WHEN 5 THEN NVL(FIVE_TOC,<![CDATA['&nbsp']]>)
+                		WHEN 6 THEN NVL(FIVE_TN,<![CDATA['&nbsp']]>)
+                		WHEN 7 THEN NVL(FIVE_TP,<![CDATA['&nbsp']]>)
+                		WHEN 8 THEN NVL(FIVE_NTU,<![CDATA['&nbsp']]>) END AS ITEM_VALUE
+  		  FROM (SELECT ROWNUM AS PAGE,MSR_DATE,TO_CHAR(FIVE_TEMP) AS FIVE_TEMP,TO_CHAR(FIVE_PH) AS FIVE_PH,TO_CHAR(FIVE_EC) AS FIVE_EC,TO_CHAR(FIVE_DO) AS FIVE_DO,TO_CHAR(FIVE_TOC) AS FIVE_TOC,TO_CHAR(FIVE_TN) AS FIVE_TN,TO_CHAR(FIVE_TP) AS FIVE_TP,TO_CHAR(FIVE_NTU) AS FIVE_NTU 
+          		  FROM (SELECT MSR_DATE,
+                       		   MAX (CASE WHEN BB.ITEM_ID = 'M02' THEN M02 ELSE NULL END) AS FIVE_TEMP,
+                       		   MAX (CASE WHEN BB.ITEM_ID = 'M03' THEN M03 ELSE NULL END) AS FIVE_PH,
+                       		   MAX (CASE WHEN BB.ITEM_ID = 'M04' THEN M04 ELSE NULL END) AS FIVE_EC,
+		                       MAX (CASE WHEN BB.ITEM_ID = 'M05' THEN M05 ELSE NULL END) AS FIVE_DO,
+		                       MAX (CASE WHEN BB.ITEM_ID = 'M06' THEN M06 ELSE NULL END) AS FIVE_TOC,
+		                       MAX (CASE WHEN BB.ITEM_ID = 'M27' THEN M27 ELSE NULL END) AS FIVE_TN,
+		                       MAX (CASE WHEN BB.ITEM_ID = 'M28' THEN M28 ELSE NULL END) AS FIVE_TP,
+		                       MAX (CASE WHEN BB.ITEM_ID = 'M79' THEN M79 ELSE NULL END) AS FIVE_NTU
+                 		 FROM (SELECT A.SITE_ID,TO_CHAR (TO_DATE (MSR_DATE, 'YYYY.MM.DDHH24:MI:SS'),'YYYY.MM.DDHH24:MI') AS MSR_DATE,M02,M03,M04,M05,M06,M27,M28,M79
+                         		 FROM SITEINFO_TB A, 
+                              		  MAN_HOURDATA_TB B
+                                WHERE B.MSR_DATE >=TO_CHAR(ADD_MONTHS(SYSDATE, -7), 'YYYYMMDDHH24MI')
+                        		  AND A.SITE_ID = (SELECT BRRER_REPRSNT_SPOT_CODE
+                                             		 FROM TCM_BRRER_MAPNG
+                                            		WHERE BRRER_CODE = (SELECT BRRER_CODE
+                                                                  		  FROM TCM_BRRER_MAPNG
+                                                                 		 WHERE BRRER_REPRSNT_SPOT_CODE = #{ptNo}
+                                                               			)
+                                              		  AND DTA_CODE = '010103'
+                                           		  ) 
+                          		  AND A.SITE_ID = B.SITE_ID
+                          		  AND SUBSTR(B.MSR_DATE, 1, 8) = (SELECT SUBSTR(MSR_DATE, 1, 8) 
+                                                            		FROM SITEINFO_TB A, 
+                                                                 	     MAN_HOURDATA_TB B,
+                                                                 		 TCM_BRRER_MAPNG C
+                                                           		   WHERE A.SITE_ID = B.SITE_ID
+                                                             		 AND A.SITE_ID = C.BRRER_REPRSNT_SPOT_CODE
+                                                             		 AND C.BRRER_CODE = (SELECT BRRER_CODE
+                                                                                   		   FROM TCM_BRRER_MAPNG
+                                                                                  		  WHERE BRRER_REPRSNT_SPOT_CODE = #{ptNo}
+                                                                                         )
+                                                             		 AND ROWNUM = 1
+                                                                  )
+		                              ) AA,
+		                             (SELECT SITE_ID, ITEM_ID
+		                         		FROM SITEITEMLIST2_TB
+		                        	   WHERE USE_YN = '1'
+		                      		 ) BB
+		               WHERE AA.SITE_ID = BB.SITE_ID
+		            GROUP BY MSR_DATE
+		            ORDER BY MSR_DATE DESC
+		              )
+		    ) A,
+		    ( SELECT ROWNUM AS NUM
+		        FROM DICTIONARY
+		       WHERE ROWNUM <![CDATA[<]]> 9
+		    )
+		WHERE PAGE <![CDATA[<]]> 6
+	 ORDER BY NUM
+    </select>
+    <!-- 일반측정지점 -->
+    <select id="basic_MainGridList" parameterType="Map" resultType="Map">
+		SELECT PAGE,DATES,ITEM_NAME,NVL(ITEM_VALUE,<![CDATA['&nbsp']]>) AS ITEM_VALUE
+  		  FROM (SELECT PAGE,DATES,
+              		   CASE NUM WHEN 1 THEN 'BASIC_TEMP'
+                        		WHEN 2 THEN 'BASIC_DOC'
+                        		WHEN 3 THEN 'BASIC_CLOA'
+		                        WHEN 4 THEN 'BASIC_BOD'
+		                        WHEN 5 THEN 'BASIC_COD'
+		                        WHEN 6 THEN 'BASIC_TP'
+		                        WHEN 7 THEN 'BASIC_TN'END AS ITEM_NAME,
+               		   CASE NUM WHEN 1 THEN TO_CHAR(ITEM_TEMP)
+                        		WHEN 2 THEN TO_CHAR(ITEM_DOC)
+		                        WHEN 3 THEN TO_CHAR(ITEM_CLOA)
+		                        WHEN 4 THEN TO_CHAR(ITEM_BOD)
+		                        WHEN 5 THEN TO_CHAR(ITEM_COD)
+		                        WHEN 6 THEN TO_CHAR(ITEM_TP)
+		                        WHEN 7 THEN TO_CHAR(ITEM_TN) END AS ITEM_VALUE
+          			FROM (SELECT ROWNUM AS PAGE,DATES,ITEM_TEMP,ITEM_DOC,ITEM_CLOA,ITEM_BOD,ITEM_COD,ITEM_TP,ITEM_TN
+                  			FROM (SELECT C.WMYMD || ' ' || B.WMWK AS DATES,ITEM_TEMP,ITEM_DOC,ITEM_CLOA,ITEM_BOD,ITEM_COD,ITEM_TP,ITEM_TN
+                          			FROM RWMPT A,
+                                         RWMDTI_NEW B,
+                                         RWMDTD C
+                         		   WHERE A.PT_NO = #{ptNo}
+                         		     AND A.RETGBN = 'Y'
+                         		   	 AND A.PT_NO NOT IN ('1007A20','1007A27','1007A60','2007A25','2009A05','2009A30','2011A25','2011A55','2014A25','2014A70','2020A32','3012A07','3012A32','3012A42','5004A10','5004A35')
+                         		   	 AND A.PT_NO = B.PT_NO
+                                     AND B.PT_NO = C.PT_NO
+                                     AND B.WMYR = C.WMYR
+                                     AND B.WMOD = C.WMOD
+                        ORDER BY C.WMYMD DESC, B.WMWK DESC
+                       	  )
+                   WHERE ROWNUM <![CDATA[<]]> 6
+               ) A,
+               (SELECT ROWNUM AS NUM
+                  FROM DICTIONARY
+                 WHERE ROWNUM <![CDATA[<]]> 8
+               ) B
+		ORDER BY NUM
+					)
+    </select>
+    <!-- 수생태 -->
+    <select id="eco_MainGridList" parameterType="Map" resultType="Map">
+		SELECT PAGE, WMYMD, ITEM_NM, ITEM_VALUE_1, ITEM_VALUE_2, ITEM_VALUE_3, ITEM_VALUE_4, ITEM_VALUE_5
+          FROM (SELECT PT_NO , RANK() OVER(PARTITION BY PT_NO, ITEM_NM ORDER BY REAL_WMYMD DESC) PAGE , WMYMD , ITEM_NM , TO_CHAR(ITEM_VALUE_1) AS ITEM_VALUE_1 , TO_CHAR(ITEM_VALUE_2) AS ITEM_VALUE_2 , TO_CHAR(ITEM_VALUE_3) AS ITEM_VALUE_3 , TO_CHAR(ITEM_VALUE_4) AS ITEM_VALUE_4 , TO_CHAR(ITEM_VALUE_5) AS ITEM_VALUE_5
+            	  FROM ECO_RWMDT )
+         WHERE PAGE <![CDATA[<]]> 6
+           AND PT_NO = #{ptNo}
+ 	</select>
+</mapper>

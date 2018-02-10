@@ -1,0 +1,3696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="excelDownMapper">
+    
+    <!-- 지역 결과 목록 조회 -->
+    <select id="ExcelsiteResult" parameterType="Map" resultType="java.util.LinkedHashMap">
+    			SELECT DISTINCT 
+					PT_NO 
+					,PT_NM 
+					,WMYMD 
+					,ITEM_LVL 
+					,ITEM_AMNT 
+					,ITEM_TEMP 
+					,ITEM_PH 
+					,ITEM_DOC 
+					,ITEM_BOD 
+					,ITEM_COD 
+					,ITEM_SS 
+					,ITEM_TCOLI 
+					,ITEM_TN 
+					,ITEM_TP 
+					,ITEM_CD 
+					,ITEM_CN 
+					,ITEM_PB 
+					,ITEM_CR6 
+					,ITEM_AS 
+					,ITEM_HG 
+					,ITEM_CU 
+					,ITEM_ABS 
+					,ITEM_PCB 
+					,ITEM_OP 
+					,ITEM_MN 
+					,ITEM_TRANS 
+					,ITEM_CLOA 
+					,ITEM_CL 
+					,ITEM_ZN 
+					,ITEM_CR 
+					,ITEM_FE 
+					,ITEM_PHENOL 
+					,ITEM_NHEX 
+					,ITEM_EC 
+					,ITEM_TCE 
+					,ITEM_HCHO 
+					,ITEM_NI 
+					,ITEM_BA 
+					,ITEM_SE 
+				FROM V_RWMDTI_NEW_DE
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND PT_NO IN
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+					AND WMYR || WMOD BETWEEN #{startDate} AND #{endDate}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY WMYMD DESC
+    </select>
+    
+    <!-- 어패류 구제현황 결과 조회 -->
+    <select id="ExcelfsSuccor" parameterType="Map" resultType="java.util.LinkedHashMap">
+    			SELECT 
+		             OBSNM
+					,AM_NM
+					,RLIF_ACT_DE
+					,RLIF_FISHES_CO
+					,RLIF_SHELFISH_CO
+					,PARTCLR_MATTER
+				FROM V_FSNSLFS_RLIFDTA_DE A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND BRRER_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND TO_CHAR(TO_DATE(RLIF_ACT_DE, 'YYYY-MM-DD'), 'YYYYMM') BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY RLIF_ACT_DE DESC
+		
+	    
+    </select>
+    
+    
+    <!-- 4대강 보 퇴적물 요출 조사 및 평가 결과 조회 -->
+    <select id="ExcelsedimentEval" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	  
+				SELECT 
+					BRRER_CODE
+					,OBSNM
+					,SPOT_SE
+					,EXAMIN_YEAR
+					,EXAMIN_TME
+					,EXAMIN_MT
+					,EXAMIN_DE
+					,EXAMIN_TIME
+					,SURLYR_DPWT
+					,SURLYR_WTRTP
+					,SURLYR_DOXY
+					,BOTLYR_DPWT
+					,BOTLYR_WTRTP
+					,BOTLYR_DOXY
+					,SPT_SOD
+					,AERT_SOD
+					,BNF_NH4N
+					,BNF_NOXN_CM
+					,BNF_PO4P
+					,PARTCLR_MATTER
+				FROM 
+				V_DEST_BNFDTA_DE A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND BRRER_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND A.EXAMIN_YEAR || A.EXAMIN_MT BETWEEN #{start_ym} AND #{end_ym}
+				</if>		
+				AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY A.EXAMIN_YEAR || A.EXAMIN_MT || A.EXAMIN_DE DESC
+		
+    </select>
+    
+    <!-- 자동유량관측망 결과 조회 -->
+    <select id="ExcelautoWater" parameterType="Map" resultType="java.util.LinkedHashMap">
+    			SELECT 
+					OBSNM
+					,OBSR_DT
+					,WAL
+					,CSEC_AR
+					,AVRG_SPFLD
+					,FLUX
+					,RM
+				FROM 
+				V_ATMCFLUX_TM A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND OBSRVT_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND OBSR_DT BETWEEN #{start_ym} || '00000000' AND #{end_ym} || '00000000'
+				</if>		
+			    AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY OBSR_DT DESC
+		
+    </select>
+    
+    <!-- 오염우려지역 결과 조회 -->
+    <select id="ExcelpollutionConcern" parameterType="Map" resultType="java.util.LinkedHashMap">
+    		SELECT
+				SPOT_STD_CODE
+				,SPOT_NM
+				,GWMYR
+				,GWMOD
+				,IC_00001
+				,IC_00002
+				,IC_00003
+				,IC_00004
+				,IC_00005
+				,IC_00006
+				,IC_00007
+				,IC_00008
+				,IC_00009
+				,IC_00010
+				,IC_00011
+				,IC_00012
+				,IC_00013
+				,IC_00014
+				,IC_00015
+				,IC_00016
+				,IC_00017
+				,IC_00018
+				,IC_00019
+				,IC_00021
+				,IC_00027
+				,IC_00028
+				,IC_00029
+				,IC_00030
+				,IC_00031
+				,IC_00032
+				,IC_00033
+				,IC_00034
+				,IC_00038
+				,IC_00039
+				,IC_00040
+			FROM V_SGIS_E03_HT
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_STD_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+				AND GWMYR||GWMOD BETWEEN #{start_ym} AND #{end_ym}
+			</if>
+			AND ROWNUM BETWEEN 1 AND 60000
+    </select>
+    
+    <!-- 일반지역 결과 조회 -->
+    <select id="ExcelnormalSite" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	
+			SELECT
+				SPOT_STD_CODE
+				,SPOT_NM
+				,GWMYR
+				,GWMOD
+				,IC_00001
+				,IC_00002
+				,IC_00003
+				,IC_00004
+				,IC_00005
+				,IC_00006
+				,IC_00007
+				,IC_00008
+				,IC_00009
+				,IC_00010
+				,IC_00011
+				,IC_00012
+				,IC_00013
+				,IC_00014
+				,IC_00015
+				,IC_00016
+				,IC_00017
+				,IC_00018
+				,IC_00019
+				,IC_00021
+				,IC_00027
+				,IC_00028
+				,IC_00029
+				,IC_00030
+				,IC_00031
+				,IC_00032
+				,IC_00033
+				,IC_00034
+				,IC_00035
+				,IC_00036
+				,IC_00037
+				,IC_00058
+			FROM V_SGIS_G02_HT
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_STD_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+				AND GWMYR||GWMOD BETWEEN #{start_ym} AND #{end_ym}
+			</if>
+		AND ROWNUM BETWEEN 1 AND 60000
+    </select>
+    
+    <!-- 퇴적물 측정망 운영 결과 조회 -->
+    <select id="ExcelsdmAll" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	
+				SELECT
+					PT_NM
+					,YMD
+					,WMWK
+					,WMCTM
+					,POLL_STEP
+					,ITEM_DOW
+					,ITEM_DOW_SURF
+					,ITEM_TEMP_SURF
+					,ITEM_DO_SURF
+					,ITEM_PH_SURF
+					,ITEM_EC_SURF
+					,ITEM_DOW_LOW
+					,ITEM_TEMP_LOW
+					,ITEM_DO_LOW
+					,ITEM_PH_LOW
+					,ITEM_EC_LOW
+					,ITEM_TRANSPARENCY
+					,ITEM_FSD
+					,ITEM_FST
+					,ITEM_FCL
+					,ITEM_WTC
+					,ITEM_PCA
+					,ITEM_PCA_CLASS
+					,ITEM_COD
+					,ITEM_TOC
+					,ITEM_TN
+					,ITEM_TN_CLASS
+					,ITEM_TP
+					,ITEM_TP_CLASS
+					,ITEM_SRP
+					,ITEM_PB
+					,ITEM_PB_CLASS
+					,ITEM_ZN
+					,ITEM_ZN_CLASS
+					,ITEM_CU
+					,ITEM_CU_CLASS
+					,ITEM_CR
+					,ITEM_CR_CLASS
+					,ITEM_NI
+					,ITEM_NI_CLASS
+					,ITEM_AS
+					,ITEM_AS_CLASS
+					,ITEM_CD
+					,ITEM_CD_CLASS
+					,ITEM_HG
+					,ITEM_HG_CLASS
+					,ITEM_AL
+					,ITEM_LI
+					,ITEM_CL_2_PHENYL                
+					,ITEM_2_CL_2_PHENYL              
+					,ITEM_3_CL_2_PHENYL              
+					,ITEM_4_CL_2_PHENYL              
+					,ITEM_5_CL_2_PHENYL              
+					,ITEM_6_CL_2_PHENYL              
+					,ITEM_7_CL_2_PHENYL              
+					,ITEM_8_CL_2_PHENYL              
+					,ITEM_9_CL_2_PHENYL              
+					,ITEM_10_CL_2_PHENYL             
+					,ITEM_TOT_PCBS                   
+					,ITEM_NAPTHALENE                 
+					,ITEM_ACENAPTHALENE              
+					,ITEM_ACENAPTHENE                
+					,ITEM_FLUORENE                   
+					,ITEM_PHENANTHRENE               
+					,ITEM_ANTHRACENE                 
+					,ITEM_FLUORANTHENE               
+					,ITEM_PYRENE                     
+					,ITEM_BENZO_A_ANTHRACENE         
+					,ITEM_CRYSENE                    
+					,ITEM_BENZO_B_FLUORANTHENE       
+					,ITEM_BENZO_F_FLUORANTHENE       
+					,ITEM_BENZO_A_PYRENE             
+					,ITEM_INDENO_1_2_3_CD_PYRENE     
+					,ITEM_DIBENZO_A_H_ANTHRACENE     
+					,ITEM_BENZO_G_H_I_PERYLENE       
+					,ITEM_TOTAL_PAHS                 
+					,ITEM_O_P_DDE                    
+					,ITEM_P_P_DDE                    
+					,ITEM_O_P_DDD                    
+					,ITEM_P_P_DDD                    
+					,ITEM_O_P_DDT                    
+					,ITEM_P_P_DDT                    
+					,ITEM_TOTAL_DDT                  
+					,ITEM_1_1_1_TRICHLOROETHANE    
+					,ITEM_1_2_DICHLOROETHANE       
+					,ITEM_BENZENE                  
+					,ITEM_CARBON_TETRA_CHLORIDE    
+					,ITEM_CHLOROFORM               
+					,ITEM_ETHYL_BENZENE            
+					,ITEM_METHYL_CHLORIDE          
+					,ITEM_TETRA_CHLORO_ETHYLENE    
+					,ITEM_TRI_CHLORO_ETHYLENE      
+					,ITEM_TOLUENE                  
+					,ITEM_M_P_XYLENE               
+					,ITEM_O_XYLENE                 
+				FROM V_SDM_RWMDTI_DE
+				WHERE 1=1
+				AND SUBSTR(PT_NO,5,1) IN ('R', 'L')
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND PT_NO IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND WMYR || WMOM BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY YMD DESC
+		
+    </select>
+    
+    <!-- 퇴적물 측정망 운영 하천 결과 조회 -->
+    <select id="ExcelsdmR" parameterType="Map" resultType="java.util.LinkedHashMap">
+    	
+				SELECT
+					PT_NM
+					,YMD
+					,WMWK
+					,WMCTM
+					,POLL_STEP
+					,ITEM_DOW
+					,ITEM_DOW_SURF
+					,ITEM_TEMP_SURF
+					,ITEM_DO_SURF
+					,ITEM_PH_SURF
+					,ITEM_EC_SURF
+					,ITEM_DOW_LOW
+					,ITEM_TEMP_LOW
+					,ITEM_DO_LOW
+					,ITEM_PH_LOW
+					,ITEM_EC_LOW
+					,ITEM_FSD
+					,ITEM_FST
+					,ITEM_FCL
+					,ITEM_WTC
+					,ITEM_PCA
+					,ITEM_PCA_CLASS
+					,ITEM_COD
+					,ITEM_TOC
+					,ITEM_TN
+					,ITEM_TN_CLASS
+					,ITEM_TP
+					,ITEM_TP_CLASS
+					,ITEM_SRP
+					,ITEM_PB
+					,ITEM_PB_CLASS
+					,ITEM_ZN
+					,ITEM_ZN_CLASS
+					,ITEM_CU
+					,ITEM_CU_CLASS
+					,ITEM_CR
+					,ITEM_CR_CLASS
+					,ITEM_NI
+					,ITEM_NI_CLASS
+					,ITEM_AS
+					,ITEM_AS_CLASS
+					,ITEM_CD
+					,ITEM_CD_CLASS
+					,ITEM_HG
+					,ITEM_HG_CLASS
+					,ITEM_AL
+					,ITEM_LI
+				FROM V_SDM_RWMDTI_R_DE
+				WHERE 1=1
+				AND SUBSTR(PT_NO,5,1) = 'R'
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND PT_NO IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND WMYR || WMOM BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY YMD DESC
+		
+    </select>
+    
+    <!-- 퇴적물 측정망 운영 호소 결과 조회 -->
+    <select id="ExcelsdmL" parameterType="Map" resultType="java.util.LinkedHashMap">
+    			SELECT
+					PT_NM
+					,YMD
+					,WMWK
+					,WMCTM
+					,POLL_STEP
+					,ITEM_DOW
+					,ITEM_DOW_SURF
+					,ITEM_TEMP_SURF
+					,ITEM_DO_SURF
+					,ITEM_PH_SURF
+					,ITEM_EC_SURF
+					,ITEM_DOW_LOW
+					,ITEM_TEMP_LOW
+					,ITEM_DO_LOW
+					,ITEM_PH_LOW
+					,ITEM_EC_LOW
+					,ITEM_TRANSPARENCY
+					,ITEM_FSD
+					,ITEM_FST
+					,ITEM_FCL
+					,ITEM_WTC
+					,ITEM_PCA
+					,ITEM_PCA_CLASS
+					,ITEM_COD
+					,ITEM_TOC
+					,ITEM_TN
+					,ITEM_TN_CLASS
+					,ITEM_TP
+					,ITEM_TP_CLASS
+					,ITEM_SRP
+					,ITEM_PB
+					,ITEM_PB_CLASS
+					,ITEM_ZN
+					,ITEM_ZN_CLASS
+					,ITEM_CU
+					,ITEM_CU_CLASS
+					,ITEM_CR
+					,ITEM_CR_CLASS
+					,ITEM_NI
+					,ITEM_NI_CLASS
+					,ITEM_AS
+					,ITEM_AS_CLASS
+					,ITEM_CD
+					,ITEM_CD_CLASS
+					,ITEM_HG
+					,ITEM_HG_CLASS
+					,ITEM_AL
+					,ITEM_LI
+					,ITEM_CL_2_PHENYL                
+					,ITEM_2_CL_2_PHENYL              
+					,ITEM_3_CL_2_PHENYL              
+					,ITEM_4_CL_2_PHENYL              
+					,ITEM_5_CL_2_PHENYL              
+					,ITEM_6_CL_2_PHENYL              
+					,ITEM_7_CL_2_PHENYL              
+					,ITEM_8_CL_2_PHENYL              
+					,ITEM_9_CL_2_PHENYL              
+					,ITEM_10_CL_2_PHENYL             
+					,ITEM_TOT_PCBS                   
+					,ITEM_NAPTHALENE                 
+					,ITEM_ACENAPTHALENE              
+					,ITEM_ACENAPTHENE                
+					,ITEM_FLUORENE                   
+					,ITEM_PHENANTHRENE               
+					,ITEM_ANTHRACENE                 
+					,ITEM_FLUORANTHENE               
+					,ITEM_PYRENE                     
+					,ITEM_BENZO_A_ANTHRACENE         
+					,ITEM_CRYSENE                    
+					,ITEM_BENZO_B_FLUORANTHENE       
+					,ITEM_BENZO_F_FLUORANTHENE       
+					,ITEM_BENZO_A_PYRENE             
+					,ITEM_INDENO_1_2_3_CD_PYRENE     
+					,ITEM_DIBENZO_A_H_ANTHRACENE     
+					,ITEM_BENZO_G_H_I_PERYLENE       
+					,ITEM_TOTAL_PAHS                 
+					,ITEM_O_P_DDE                    
+					,ITEM_P_P_DDE                    
+					,ITEM_O_P_DDD                    
+					,ITEM_P_P_DDD                    
+					,ITEM_O_P_DDT                    
+					,ITEM_P_P_DDT                    
+					,ITEM_TOTAL_DDT                  
+					,ITEM_1_1_1_TRICHLOROETHANE    
+					,ITEM_1_2_DICHLOROETHANE       
+					,ITEM_BENZENE                  
+					,ITEM_CARBON_TETRA_CHLORIDE    
+					,ITEM_CHLOROFORM               
+					,ITEM_ETHYL_BENZENE            
+					,ITEM_METHYL_CHLORIDE          
+					,ITEM_TETRA_CHLORO_ETHYLENE    
+					,ITEM_TRI_CHLORO_ETHYLENE      
+					,ITEM_TOLUENE                  
+					,ITEM_M_P_XYLENE               
+					,ITEM_O_XYLENE                 
+				FROM V_SDM_RWMDTI_L_DE
+				WHERE 1=1
+				AND SUBSTR(PT_NO,5,1) = 'L'
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND PT_NO IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND WMYR || WMOM BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000		
+				ORDER BY YMD DESC
+		
+    </select>
+    
+    <!-- 수위 측정망 결과 조회 -->
+    <select id="ExcelwaterLvl" parameterType="Map" resultType="java.util.LinkedHashMap">
+    			SELECT
+					WLOBSCD
+					,OBSNM
+					,TO_CHAR(TO_DATE(YMDH, 'YYYYMMDDHH24'), 'YYYY-MM-DD(HH)') AS YMDH
+					,WL
+				FROM V_WLHR_TM
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND WLOBSCD IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND SUBSTR(YMDH,1, 6) BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+			    AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY YMDH DESC
+    </select>
+    
+    <!-- 유량 측정망 결과 조회 -->
+    <select id="Exceldischarge" parameterType="Map" resultType="java.util.LinkedHashMap">
+    		SELECT
+				FWOBSCD
+				,OBSNM
+				,TO_CHAR(TO_DATE(YMDH, 'YYYYMMDDHH24'), 'YYYY-MM-DD(HH)') AS YMDH
+				,FW
+			FROM V_FWHR_TM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND FWOBSCD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+				AND SUBSTR(YMDH,1, 6) BETWEEN #{start_ym} AND #{end_ym}
+			</if>
+			AND ROWNUM BETWEEN 1 AND 60000
+			ORDER BY YMDH DESC
+		
+	    
+    </select>
+    
+    
+    <select id="ExcelwaterForecast" parameterType="Map" resultType="java.util.LinkedHashMap">
+	    		SELECT 
+					A.PT_NO
+					,A.PT_NM
+					,A.GUBUN_NM
+					,A.WMYR
+					,A.WMOD
+					,A.WMWK
+					,A.WMYMD
+					,A.WMMN
+					,A.WMCYMD
+					,A.WMCTM
+					,A.WMFDT
+					,A.WMTDT
+					,A.ITEM_TEMP
+					,A.ITEM_TEMP_SURF
+					,A.ITEM_PH
+					,A.ITEM_PH_SURF
+					,A.ITEM_DOC 
+					,A.ITEM_DOC_SURF
+					,A.ITEM_AVG_CLOA
+					,A.ITEM_SUF_CLOA
+					,A.ITEM_GEOSMIN
+					,A.ITEM_2MIB
+					,A.ITEM_MICROCYSTIN
+					,A.ITEM_BLUE_GREEN_ALGAE
+					,A.ITEM_DOMINANT_BLUE_GREEN_ALGAE
+					,A.ITEM_BGA_MICROCYSTIS
+					,A.ITEM_BGA_ANABAENA
+					,A.ITEM_BGA_OSILLATORIA
+					,A.ITEM_BGA_APHANIZOMENON
+					,A.ITEM_TOT_ALGAE
+					,A.ITEM_TOT_DOM_CLASS
+					,A.ITEM_TOT_DOM_GENUS
+					,A.ITEM_TOT_BG_ALGAE
+					,A.ITEM_TOT_BG_DOM_CLASS
+					,A.ITEM_TOT_DIATOM
+					,A.ITEM_TOT_DIATOM_DOM_CLASS
+					,A.ITEM_TOT_GREEN_ALGAE
+					,A.ITEM_TOT_GREEN_ALGAE_DOM_CLASS
+					,A.ITEM_TOT_ETC_ALGAE
+					,A.ITEM_TOT_ETC_ALGAE_DOM_CLASS
+					,A.ITEM_BOD
+					,A.ITEM_COD
+					,A.ITEM_TP
+					,A.ITEM_TRANSPARENCY
+					,A.ITEM_TURBIDITY
+					,A.ITEM_WEATHER
+					,A.ITEM_EC
+					,A.ITEM_TM_LVL
+					,A.ITEM_WATER_DEPTH
+					,A.ITEM_LAST_RAINFALL
+					,A.ITEM_DAY_RAINFALL
+					,A.ADD_ISSUE
+				FROM 
+				V_RWMDTI_B_DE A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND PT_NO IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND WMYR || WMOD BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				   AND ROWNUM  BETWEEN 1 AND 60000
+				ORDER BY WMYMD DESC, PT_NO ASC
+		
+    </select>
+    
+    <select id="ExcelbirdWarning" parameterType="Map" resultType="java.util.LinkedHashMap">
+	    		SELECT 
+					A.PT_NO
+					,A.PT_NM
+					,A.GUBUN_NM
+					,A.WMYR
+					,A.WMOD
+					,A.WMWK
+					,A.WMYMD
+					,A.WMMN
+					,A.WMCYMD
+					,A.WMCTM
+					,A.WMFDT
+					,A.WMTDT
+					,A.ITEM_TEMP
+					,A.ITEM_TEMP_SURF
+					,A.ITEM_PH
+					,A.ITEM_PH_SURF
+					,A.ITEM_DOC 
+					,A.ITEM_DOC_SURF
+					,A.ITEM_AVG_CLOA
+					,A.ITEM_SUF_CLOA
+					,A.ITEM_GEOSMIN
+					,A.ITEM_2MIB
+					,A.ITEM_MICROCYSTIN
+					,A.ITEM_BLUE_GREEN_ALGAE
+					,A.ITEM_DOMINANT_BLUE_GREEN_ALGAE
+					,A.ITEM_BGA_MICROCYSTIS
+					,A.ITEM_BGA_ANABAENA
+					,A.ITEM_BGA_OSILLATORIA
+					,A.ITEM_BGA_APHANIZOMENON
+					,A.ITEM_TOT_ALGAE
+					,A.ITEM_TOT_DOM_CLASS
+					,A.ITEM_TOT_DOM_GENUS
+					,A.ITEM_TOT_BG_ALGAE
+					,A.ITEM_TOT_BG_DOM_CLASS
+					,A.ITEM_TOT_DIATOM
+					,A.ITEM_TOT_DIATOM_DOM_CLASS
+					,A.ITEM_TOT_GREEN_ALGAE
+					,A.ITEM_TOT_GREEN_ALGAE_DOM_CLASS
+					,A.ITEM_TOT_ETC_ALGAE
+					,A.ITEM_TOT_ETC_ALGAE_DOM_CLASS
+					,A.ITEM_BOD
+					,A.ITEM_COD
+					,A.ITEM_TP
+					,A.ITEM_TRANSPARENCY
+					,A.ITEM_TURBIDITY
+					,A.ITEM_WEATHER
+					,A.ITEM_EC
+					,A.ITEM_TM_LVL
+					,A.ITEM_WATER_DEPTH
+					,A.ITEM_LAST_RAINFALL
+					,A.ITEM_DAY_RAINFALL
+					,A.ADD_ISSUE
+				FROM 
+				V_RWMDTI_SC_DE A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND PT_NO IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND WMYR || WMOD BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+	    		AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY WMYMD DESC, PT_NO ASC
+		
+    </select>
+    
+    <!-- 보 운연현황 결과 조회 -->										
+    <select id="ExcelBoSite" parameterType="Map" resultType="java.util.LinkedHashMap">
+	    SELECT  
+	    	  BOOBSCD, SBSNCD, YMDHM, SWL, OWL , SFW , ECPC ,
+              INF , TOTOTF, EGOTF , GTOTF , CBOTF , FWOTF , ETCOTF
+	        FROM (
+			SELECT ROWNUM RNUM, AA.* FROM (   
+				SELECT 
+	    		      BOOBSCD, SBSNCD, YMDHM, SWL, OWL , SFW , ECPC ,
+	                  INF , TOTOTF, EGOTF , GTOTF , CBOTF , FWOTF , ETCOTF 
+	              FROM
+	            	  V_BOMST_MIN
+				 WHERE 
+				 	  1=1 
+				 	  AND BOOBSCD IN 
+				 	<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+					  AND SUBSTR(YMDHM,1,6) BETWEEN #{start_ym} AND #{end_ym}
+					  ORDER BY YMDHM DESC
+			) AA
+        )
+	    WHERE RNUM BETWEEN 1 AND 60000
+	</select>
+	
+	<!-- TMS -->
+    <select id="ExcelTms" parameterType="Map" resultType="java.util.LinkedHashMap">
+	    	   SELECT
+					FACT_CODE, FACT_FNAME, FACT_KIND_NAME, FACT_CAPACITY,
+                    WAST_NO, TO_CHAR(TO_DATE(BASE_TIME,'YYYYMMDD'),'YYYY.MM.DD') AS BASE_TIME, BOD, COD, SUS, TON, TOP, PHY, FLW, TOC
+         		FROM
+               V_TMS_HOURDATA_DE
+               WHERE
+               1=1 
+               AND FACT_CODE IN
+                 <foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				 </foreach>
+               AND SUBSTR(BASE_TIME,1,6) BETWEEN #{start_ym} AND #{end_ym} 
+	    	   AND ROWNUM BETWEEN 1 AND 60000
+               ORDER BY BASE_TIME DESC
+		
+    </select>
+    
+	
+	<!-- 수심별 정밀조사-->
+    <select id="ExcelWaterDetail" parameterType="Map" resultType="java.util.LinkedHashMap">
+	    
+		    	      SELECT
+		              		PT_NO,PT_NM,WMYMD,POINT,WMTM,DEP,WMDEP,ITEM_TEMP,ITEM_PH,ITEM_DOC,ITEM_EC,ITEM_CLOA 
+		  	      	    FROM
+		              		V_RWMDT_DEP_DE
+		         	   WHERE
+		              		1=1
+		              	 AND SUBSTR(WMYMD,1,4) || SUBSTR(WMYMD,6,2) BETWEEN #{start_ym} AND #{end_ym}
+		              	 AND PT_NO IN
+		            <foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+							#{item}
+					</foreach>
+					AND ROWNUM BETWEEN 1 AND 60000  
+				        ORDER BY WMYMD DESC
+    </select>
+	
+    <!-- 취수시설목록 -->
+    <select id="Excelwifclty" parameterType="Map" resultType="java.util.LinkedHashMap">
+			SELECT 
+				WRSSM_NM
+				,OBSNM
+				,WIFCLT_NM
+				,RSTRCT_WAL
+				,FCLTY_IMPRVM_CT
+				,PRPOS
+				,DO_NM
+				,CTY_NM
+				,DETAIL_ADRES
+				,MANAGE_INSTT
+				,CHARGER
+				,WIPLT
+				,BRRER_UPSTRIM_GAP_DSTNC
+				,DBD_POSBL_WAL
+				,DBD_PRMISN_QY
+				,INSTL_YM
+				,IMPRVM_BSNS_AT
+				,IMPRVM_BSNS_YM
+				,IMPRVM_CN
+				,WSP_POPLTN
+				,OPRER_TIME
+				,OPRER_DE
+				,YY_TOT_DBD_QY
+				,DE_AVRG_DBD_QY
+				,DE_MXMM_DBD_QY
+				,PUMP_INSTL_YM
+				,PUMP_FOM
+				,CALBR
+				,POWER
+				,PUMP_CO
+				,SUPLY_FLTPLT
+				,WIFCLT_CHANGE_PLAN_AT
+				,RM
+			FROM 
+			V_WIFCLTY_DTA 
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND LEGALDONG_CODE LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND LEGALDONG_CODE LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WRSSM_CODE = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+		AND ROWNUM BETWEEN 1 AND 60000  
+    </select>
+    
+    <!-- 양수시설목록 -->
+    <select id="Excelwpfclty" parameterType="Map" resultType="java.util.LinkedHashMap">
+			SELECT 
+				WRSSM_NM 
+				,OBSNM 
+				,WPFCLT_NM 
+				,RSTRCT_WAL 
+				,FCLTY_IMPRVM_CT 
+				,COMPET_YM 
+				,DO_NM 
+				,CTY_NM 
+				,DETAIL_ADRES 
+				,MANAGE_INSTT 
+				,DETAIL_INSTT 
+				,CHARGER 
+				,RCVFVR_AR 
+				,RCEPNT_CROPS_AR 
+				,ETC_CROPS_CN 
+				,ETC_CROPS_AR 
+				,BRRER_UPSTRIM_GAP_DSTNC 
+				,WIPLT 
+				,PRMISN_WP_QY 
+				,MXMM_WP_QY 
+				,AVG_WP 
+				,WP_QY_04 
+				,OPR_DAYCNT_04 
+				,WP_QY_05 
+				,OPR_DAYCNT_05 
+				,WP_QY_06 
+				,OPR_DAYCNT_06 
+				,WP_QY_07 
+				,OPR_DAYCNT_07 
+				,WP_QY_08 
+				,OPR_DAYCNT_08 
+				,WP_QY_09 
+				,OPR_DAYCNT_09 
+				,WP_QY_10 
+				,OPR_DAYCNT_10 
+				,ELSPPS_SUPLY_DE_QY 
+				,ELSPPS_SUPLY_PD 
+				,RM 
+			FROM V_WPFCLTY_DTA
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND LEGALDONG_CODE LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND LEGALDONG_CODE LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WRSSM_CODE = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+		AND ROWNUM BETWEEN 1 AND 60000  
+    </select>
+    
+    <!-- 친수시설목록 -->
+    <select id="Excelwffclty" parameterType="Map" resultType="java.util.LinkedHashMap">
+			  
+			SELECT 
+				WRSSM_NM 
+				,OBSNM 
+				,WFFCLY_NM 
+				,RSTRCT_WAL 
+				,FCLTY_IMPRVM_CT 
+				,FCLTY_PURPS 
+				,FCLTY_PURPS_CL 
+				,DO_NM 
+				,CTY_NM 
+				,DETAIL_ADRES 
+				,BRRER_UPSTRIM_GAP_DSTNC 
+				,MANAGE_INSTT 
+				,CHARGER 
+				,OPER_INSTT 
+				,OPERATOR 
+				,OPER_BEGIN_DE 
+				,MAIN_USE_MD
+				,USER_CO 
+				,SELNG_AM 
+				,BRRER_MANAGE_WAL 
+				,BRRER_UGRWTR_RSTRCT_WAL 
+				,BRRER_LWLT_WAL 
+				,BRRER_LWET_WAL 
+				,LWET_WAL 
+				,LWET_WAL_DCSN_PRVONSH 
+				,LWET_WAL_METHOD 
+				,LFTBNK_RHTBNK 
+				,CPRMISN_AT 
+				,RM 
+			FROM V_WFFCLTY_DTA
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND LEGALDONG_CODE LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND LEGALDONG_CODE LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WRSSM_CODE = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+		AND ROWNUM BETWEEN 1 AND 60000
+    </select>
+    
+	<!-- 보 구간 수생태계 모니터링 사업 - 식물 목록 -->
+    <select id="ExcelboRegion_S" parameterType="Map" resultType="java.util.LinkedHashMap">
+				SELECT 
+					A.SPOT_NM
+					,A.YEAR
+					,A.MT
+					,A.TME
+					,A.DE
+					,A.WTRSMPLE_TM
+					,A.WETHR
+					,A.WTRTP
+					,A.DOC
+					,A.PH
+					,A.EC
+					,A.BOD
+					,A.COD
+					,A.TOC
+					,A.SS
+					,A.TUR
+					,A.TN
+					,A.TP
+					,A.PO4P
+					,A.CHLA
+					,A.NO3N
+					,A.NH4N
+					,A.CDMM
+					,A.PB
+					,A.CR6
+					,A.ASN
+					,A.MRC
+					,A.TCOLI
+					,A.FCOLI
+					,A.DTN
+					,A.NH4
+					,A.DTP
+					,A.OP4
+					,A.RM
+				FROM 
+				V_BM_QLTWTR_DTA A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND SPOT_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND YEAR BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000  
+				ORDER BY YEAR || MT  DESC
+    </select>
+    
+    
+	
+	<!-- 보 구간 수생태계 모니터링 사업 - 동물플랑크톤 목록 -->
+    <select id="ExcelboRegion_D" parameterType="Map" resultType="java.util.LinkedHashMap">
+				SELECT 
+					A.SPOT_NM
+					,A.YEAR
+					,A.MT
+					,A.TME
+					,A.SE_NM
+					,A.SCNCENM
+					,A.INDVD_CO
+				FROM 
+				 V_BM_ZOPK_SPCS A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND SPOT_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND YEAR BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000  
+				ORDER BY YEAR || MT  DESC
+    </select>
+    
+	
+	<!-- 보 구간 수생태계 모니터링 사업 - 식물플랑크톤 목록 -->
+    <select id="ExcelboRegion_SM" parameterType="Map" resultType="java.util.LinkedHashMap">
+				SELECT 
+					A.SPOT_NM
+					,A.YEAR
+					,A.MT
+					,A.TME
+					,A.SCNCENM
+					,A.SEAWEED_SE
+					,A.CELL_CO
+				FROM 
+				 V_BM_PHPK_SPCS A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND SPOT_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND YEAR BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY YEAR || MT  DESC
+    </select>
+    
+	
+	<!-- 보 구간 수생태계 모니터링 사업 - 식물플랑크톤 목록 -->
+    <select id="ExcelboRegion_J" parameterType="Map" resultType="java.util.LinkedHashMap">
+				SELECT 
+					A.SPOT_NM
+					,A.YEAR
+					,A.TME
+					,A.EXAMIN_MTH_SE
+					,A.SCNCENM
+					,A.KORNM
+					,A.INDVD_CO
+				FROM 
+				 V_BM_BEMA_SPCS A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND SPOT_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND YEAR BETWEEN #{start_ym} AND #{end_ym}
+				</if>
+				AND ROWNUM BETWEEN 1 AND 60000  
+				ORDER BY YEAR || TME  DESC
+    </select>
+    
+	
+	<!-- 보 구간 수생태계 모니터링 사업 - 어류 목록 -->
+    <select id="ExcelboRegion_U" parameterType="Map" resultType="java.util.LinkedHashMap">
+				SELECT 
+					A.SPOT_NM
+					,A.YEAR
+					,A.TME
+					,A.COLCT_SE
+					,A.SCNCENM
+					,A.KORNM
+					,A.INDVD_CO
+				FROM 
+				 V_BM_FISH_SPCS A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND SPOT_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='start_ym != null and end_ym != null and start_ym != "" and end_ym != ""'>
+					AND YEAR BETWEEN #{start_ym} AND #{end_ym}
+				</if>	
+			    AND ROWNUM BETWEEN 1 AND 60000
+				ORDER BY YEAR || TME  DESC			
+		
+    </select>
+
+     <select id="ExcelAfterWaterObserve" parameterType="Map" resultType="java.util.LinkedHashMap">
+				SELECT 
+					OBSRWL_NM
+					,OBSR_DT
+					,UGRWTR_WAL
+					,OBSRWL_AL
+
+				FROM 
+				V_UGRWTR_OBSRDTA_B A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND OBSRWL_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+					AND SUBSTR(OBSR_DT,0,10) BETWEEN #{startDate} AND #{endDate}
+	    			AND ROWNUM BETWEEN 1 AND 60000  
+				</if>
+    </select>
+    
+    <!-- 전국오염원조사 생활계 목록 -->
+    <select id="excelPopTotalList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (    
+			SELECT 
+				YYYY
+				,ADM_CD
+				,DO_NM
+				,CTY_NM
+				,DONG_NM
+				,RI_NM
+				,AREA_A1
+				,AREA_A2
+				,AREA_SUM
+				,REGION
+				,REGION_DATE
+				,U_A1_TP_CODE
+				,U_A1_TP_DATE
+				,U_A1_TP_NAME
+				,U_A3_TP_CODE
+				,U_A3_TP_DATE
+				,U_A3_TP_NAME
+				,POP_SUM
+				,UPOP_SUM
+				,UPOP_A1_SUM
+				,UPOP_A1_SEPARATE_WT_SUM
+				,UPOP_A1_SEPARATE_IT_SUM
+				,UPOP_A1_COMBINED_WT_SUM
+				,UPOP_A1_COMBINED_IT_SUM
+				,UPOP_A2_SUM
+				,UPOP_A2_SANITARY
+				,UPOP_A2_SEPTIC
+				,UPOP_A2_REMOVAL
+				,SPOP_SUM
+				,SPOP_A1_SUM
+				,SPOP_A1_SEPARATE_WT_SUM
+				,SPOP_A1_SEPARATE_IT_SUM
+				,SPOP_A1_COMBINED_WT_SUM
+				,SPOP_A1_COMBINED_IT_SUM
+				,SPOP_A2_SUM
+				,SPOP_A2_SANITARY
+				,SPOP_A2_SEPTIC
+				,SPOP_A2_REMOVAL
+			FROM V_PLA_POP_TOTAL
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND ADM_CD LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND ADM_CD LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WS_CD = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY YYYY DESC, ADM_CD ASC
+		) AA
+    </select>
+    
+    <!-- 전국오염원조사 양식계 목록 -->
+    <select id="excelFishfarmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  	  
+			SELECT 
+				YYYY
+				,WS_CD
+				,AM_NM
+				,ADM_CD
+				,DO_NM
+				,CTY_NM
+				,DONG_NM
+				,RI_NM
+				,AREA_REG1
+				,AREA_INST1
+				,FEED_AMT1
+				,DELI_AMT1
+				,AREA_REG2
+				,AREA_INST2
+				,FEED_AMT2
+				,DELI_AMT2
+				,AREA_REG3
+				,AREA_INST3
+				,FEED_AMT3
+				,DELI_AMT3
+				,AREA_REG4
+				,AREA_INST4
+				,FEED_AMT4
+				,DELI_AMT4
+				,AREA_REG5
+				,AREA_INST5
+				,FEED_AMT5
+				,DELI_AMT5
+				,AREA_REG6
+				,AREA_INST6
+				,FEED_AMT6
+				,DELI_AMT6
+			FROM V_PLA_FISHFARM
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND ADM_CD LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND ADM_CD LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WS_CD = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>    				
+			ORDER BY YYYY DESC, ADM_CD ASC
+		) AA
+    </select>
+    
+    <!-- 전국오염원조사 기타수질오염원 목록 -->
+    <select id="excelOpsTotalList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,WS_CD
+				,AM_NM
+				,ADM_CD
+				,DO_NM
+				,CTY_NM
+				,DONG_NM
+				,RI_NM
+				,INST_NM
+				,IND_NM
+				,OT_NM
+				,EH_NM
+				,WW_AMT
+			FROM V_PLA_OPS_TOTAL
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND ADM_CD LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND ADM_CD LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WS_CD = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>	
+			ORDER BY YYYY DESC, ADM_CD ASC
+		) AA
+    </select>
+    
+    <!-- 전국오염원조사 매립계 기본현황 목록-->
+    <select id="excelLandfillBasicList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,WS_NM
+				,AM_NM
+				,ADM_CD
+				,DO_NM
+				,CTY_NM
+				,DONG_NM
+				,RI_NM
+				,FACI_NM
+				,REGION
+				,REGION_DATE
+				,START_DD
+				,TRT_METHOD
+				,GUBUN
+				,TOTAL_AREA
+				,CAPACITY
+			FROM V_PLA_LANDFILL_BASIC
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND FACI_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY YYYY DESC, FACI_CD ASC
+		) AA
+    </select>
+    
+    <!-- 전국오염원조사 매립계 침출수 목록-->
+    <select id="excelLandfillLeachList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				FACI_NM
+				,WORK_DT
+				,PRODUCT_AMT
+				,DISCHARGE_AMT
+				,PRODUCT_BOD
+				,PRODUCT_COD
+				,PRODUCT_TN
+				,PRODUCT_TP
+				,DISCHARGE_BOD
+				,DISCHARGE_COD
+				,DISCHARGE_TN
+				,DISCHARGE_TP
+			FROM V_PLA_LANDFILL_LEACH
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND FACI_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND SUBSTR(WORK_DT, 1, 4) BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY WORK_DT DESC, FACI_CD ASC
+		) AA
+    </select>
+    
+    <!-- 환경기초시설 기본현황 목록-->
+    <select id="excelFacilityDetailList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,FACI_NM
+				,FACI_AMT_PHYS
+				,FACI_AMT_BIO
+				,FACI_AMT_HIGHTEC
+				,TRT_METHOD_PRE
+				,TRT_METHOD_1
+				,TRT_METHOD_2
+				,TRT_METHOD_3
+				,OPR_ORG
+				,START_DD
+				,OPR_PERCENT
+				,OPR_DAYS
+				,REUSE_SUM
+				,REUSE_LANDSCAPE
+				,REUSE_WASH
+				,REUSE_PROCESS
+				,REUSE_ETC
+			FROM V_FACILITY_DETAIL
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND FACI_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY YYYY DESC, FACI_CD ASC
+		) AA
+    </select>
+    
+    <!-- 환경기초시설 총유입량 목록-->
+    <select id="excelFaciInTotalList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,FACI_NM
+				,WORK_DT
+				,PIPE_NUM
+				,AMT
+				,BOD
+				,COD
+				,SS
+				,TN
+				,TP
+				,COLI
+			FROM V_PLA_FACI_IN_TOTAL
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND FACI_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY WORK_DT DESC, FACI_CD ASC
+		) AA
+    </select>
+    
+    <!-- 환경기초시설 관거이송량 목록-->
+    <select id="excelFaciPipeTransferList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,FACI_NM
+				,WORK_DT
+				,PIPE_NUM
+				,PIPE_TYPE
+				,CONNECT_FACI_NM
+				,AMT
+				,BOD
+				,COD
+				,SS
+				,TN
+				,TP
+				,COLI
+				,BYPASS_AMT
+			FROM V_PLA_FACI_PIPE_TRANSFER
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND FACI_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY WORK_DT DESC, FACI_CD ASC
+		) AA
+    </select>
+    
+    <!-- 환경기초시설 직접이송량 목록-->
+    <select id="excelFaciDirectTransferList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,FACI_NM
+				,WORK_DT
+				,IN_PL_TYPE
+				,AMT
+				,BOD
+				,COD
+				,SS
+				,TN
+				,TP
+				,COLI
+			FROM V_PLA_FACI_DIRECT_TRANSFER
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND FACI_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY WORK_DT DESC, FACI_CD ASC
+		) AA
+    </select>
+    
+    <!-- 환경기초시설 방류유량 목록-->
+    <select id="excelFaciOutTotalList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,FACI_NM
+				,WORK_DT
+				,DISCHARGE_NUM
+				,DISCHARGE_AMT_PHYS
+				,DISCHARGE_AMT_BIO
+				,DISCHARGE_AMT_HIGHTEC
+				,BOD
+				,COD
+				,SS
+				,TN
+				,TP
+				,COLI
+			FROM V_PLA_FACI_OUT_TOTAL
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND FACI_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY WORK_DT DESC, FACI_CD ASC
+		) AA
+    </select>
+    
+    <!-- 전국오염원조사 토지계 목록 -->
+    <select id="excelLanduseList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,WS_NM
+				,AM_NM
+				,DO_NM
+				,CTY_NM
+				,DONG_NM
+				,RI_NM
+				,TP_TYPE
+				,AREA_SUM
+				,AREA_RICE
+				,AREA_FIELD
+				,AREA_FLUIT
+				,AREA_STOCKFARM
+				,AREA_FOREST
+				,AREA_SPA
+				,AREA_SALTFIELD
+				,AREA_PLATEAU
+				,AREA_FACTORY
+				,AREA_EDUCATION
+				,AREA_PARKING
+				,AREA_OILING
+				,AREA_WAREHOUSE
+				,AREA_ROAD
+				,AREA_RAILROAD
+				,AREA_RIVER
+				,AREA_EMBANKMENT
+				,AREA_WATERROAD
+				,AREA_WATERRANGE
+				,AREA_FISHFARM
+				,AREA_WATER
+				,AREA_PARK
+				,AREA_HEALTH
+				,AREA_AMUSEMENTPARK
+				,AREA_RELIGION
+				,AREA_HISTORICAL
+				,AREA_GRAVEYARD
+				,AREA_MIXED
+				,GOLF_RANGE
+				,TP_NAME
+				,STRA_SUM
+				,STRA_RICE
+				,STRA_FIELD
+				,STRA_ETC
+				,STRA_SANDPICK
+			FROM V_PLA_LANDUSE
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND ADM_CD LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND ADM_CD LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WS_CD = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY YYYY DESC, ADM_CD ASC
+		) AA
+    </select>
+    
+    <!-- 전국오염원조사 산업계 목록 -->
+    <select id="excelIndTotalList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,WS_NM
+				,AM_NM
+				,DO_NM
+				,CTY_NM
+				,DONG_NM
+				,RI_NM
+				,INST_CD
+				,STOP_FLAG
+				,IND_ID
+				,IND_NM
+				,TEL_NO
+				,IND_OWNER
+				,LC_YN
+				,IND_TYPE
+				,SCALE
+				,CTG_NM
+				,TOX_FLAG
+				,AVG_ELV
+				,CAPITAL
+				,AREA_LAND
+				,AREA_BDG
+				,REGION1
+				,REGION2
+				,IND_BASE_CD
+				,IND_ETC
+				,FARM_CD
+				,FARM_ETC
+				,PROTECT_AREA
+				,IND_GRADE
+				,SELF_TYPE
+				,MGR1_NM
+				,MGR1_CERT
+				,MGR2_NM
+				,MGR2_CERT
+				,MGR_DEP
+				,MGR_CNT
+				,MTL1_NM
+				,MTL2_NM
+				,MTL3_NM
+				,PDT1_NM
+				,PDT1_AMT
+				,PDT2_NM
+				,PDT2_AMT
+				,PDT3_NM
+				,PDT3_AMT
+				,TRT_TYPE
+				,DEND_CD
+				,DEND_ETC
+				,DPUB_CD
+				,DPUB_ETC
+				,DIND_CD
+				,DIND_ETC
+				,AREA_CD
+				,FACI_NM
+				,RV_SEC_CD
+				,STREAM_PATH
+				,WTF_NAME
+				,WUSE_T_SUM
+				,WUSE_T_WATERWORK
+				,WUSE_T_GROUND
+				,WUSE_T_STREAM
+				,WUSE_T_SEA
+				,WUSE_T_RECYCLE
+				,WUSE_I_SUM
+				,WUSE_I_BOILERUSE
+				,WUSE_I_INDUSE
+				,WUSE_I_DILTE
+				,WUSE_I_COOLING
+				,WUSE_P
+				,WUSE_E
+				,WUSE_W_SUM
+				,WUSE_W_INDUSE
+				,WUSE_W_COOLING
+				,WUSE_W_LIFE
+				,WUSE_D
+				,WUSE_DC
+				,WUSE_R_SUM
+				,WUSE_R_BEFORE
+				,WUSE_R_IN
+				,WUSE_R_AFTER
+				,WUSE_MAX
+				,CU_B
+				,PB_B
+				,A_S_B
+				,HG_B
+				,CROM_B
+				,OP_B
+				,CR6_B
+				,CD_B
+				,PC_B
+				,TC_B
+				,PE_B
+				,PCB_B
+				,SEL_B
+				,BEN_B
+				,CAR_B
+				,DICH_B
+				,ETHYL_11_B
+				,ETHYL_12_B
+				,CHLO_B
+				,CU_A
+				,PB_A
+				,A_S_A
+				,HG_A
+				,CROM_A
+				,OP_A
+				,CR6_A
+				,CD_A
+				,PC_A
+				,TC_A
+				,PE_A
+				,PCB_A
+				,SEL_A
+				,BEN_A
+				,CAR_A
+				,DICH_A
+				,ETHYL_11_A
+				,ETHYL_12_A
+				,CHLO_A
+				,TWW_AMT
+				,TWW_DISCHARGE
+				,PH_B
+				,BOD_B
+				,COD_B
+				,SS_B
+				,NHEX_A_B
+				,NHEX_P_B
+				,CR_B
+				,ZN_B
+				,MN_B
+				,ABS_B
+				,F_B
+				,FE_B
+				,TP_B
+				,TN_B
+				,PH_A
+				,BOD_A
+				,COD_A
+				,SS_A
+				,NHEX_A_A
+				,NHEX_P_A
+				,CR_A
+				,MN_A
+				,ZN_A
+				,F_A
+				,FE_A
+				,ABS_A
+				,TP_A
+				,TN_A
+				,IND_TYPE_1
+				,FAC_CNT_1
+				,CAPA_SUM_1
+				,IND_TYPE_2
+				,FAC_CNT_2
+				,CAPA_SUM_2
+				,IND_TYPE_3
+				,FAC_CNT_3
+				,CAPA_SUM_3
+				,IND_TYPE_4
+				,FAC_CNT_4
+				,CAPA_SUM_4
+				,IND_TYPE_5
+				,FAC_CNT_5
+				,CAPA_SUM_5
+				,TEC_METHOD1
+				,TFC_CAPA1
+				,TEC_METHOD2
+				,TFC_CAPA2
+				,TEC_METHOD3
+				,TFC_CAPA3
+				,TEC_METHOD4
+				,TFC_CAPA4
+				,TEC_METHOD5
+				,TFC_CAPA5
+			FROM V_PLA_IND_TOTAL
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND ADM_CD LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND ADM_CD LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WS_CD = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY YYYY DESC, ADM_CD ASC
+		) AA
+    </select>
+    
+    <!-- 전국오염원조사 축산계 목록 -->
+    <select id="excelAnimalTotalList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YYYY
+				,WS_NM
+				,AM_NM
+				,DO_NM
+				,CTY_NM
+				,DONG_NM
+				,RI_NM
+				,MANAGER
+				,LIVESTOCK_NM
+				,LIVESTOCK_CNT
+				,LIVESTOCK_AREA
+				,REGS
+				,REGS_DATE
+				,DISCHARGE_FACI_NM
+				,DISCHARGE_ADM_CD
+				,DISCHARGE_RIVER_NM
+				,INDIV_PURI_METHOD
+				,INDIV_PURI_AMT
+				,INDIV_PURI_MONEY
+				,INDIV_COMPOST_METHOD
+				,INDIV_COMPOST_AMT
+				,INDIV_COMPOST_MONEY
+				,INDIV_LIQUID_METHOD
+				,INDIV_LIQUID_AMT
+				,INDIV_LIQUID_MONEY
+				,ENTRUST_PUB_COLMETHOD
+				,ENTRUST_PUB_DT
+				,ENTRUST_PUB_FACI_NM
+				,ENTRUST_PUB_AMT
+				,ENTRUST_PUB_MONEY
+				,ENTRUST_REUSE_AMT
+				,ENTRUST_REUSE_MONEY
+				,ENTRUST_SEA_AMT
+				,ENTRUST_SEA_MONEY
+				,ENTRUST
+				,ETC_METHOD
+				,ETC_AMT
+				,ETC_MONEY
+				,ETC
+				,NO_TRT_AMT
+				,LEX_METHOD
+				,LEX_METHOD_ETC
+				,SPRAY_LANDUSE
+				,SPRAY_ADM_CD
+			FROM V_PLA_ANIMAL_TOTAL
+			WHERE 1=1
+			<choose>
+				<when test='select_area_sub != null and select_area_sub != ""'>
+					AND ADM_CD LIKE SUBSTR(#{select_area_sub}, 1,4)||'%'
+				</when>
+				<otherwise>
+					<if test='select_area != null and select_area != ""'>
+						AND ADM_CD LIKE SUBSTR(#{select_area}, 1,2)||'%'
+					</if>
+				</otherwise>
+			</choose>
+			<choose>
+				<when test='select_water_sys_sub != null and select_water_sys_sub != ""'>
+					AND AM_CD = #{select_water_sys_sub}
+				</when>
+				<otherwise>
+					<if test='select_water_sys != null and select_water_sys != ""'>
+						AND WS_CD = #{select_water_sys}
+					</if>
+				</otherwise>
+			</choose>
+			<if test='select_start_year != null and select_end_year != null and select_start_year != "" and select_end_year != ""'>
+				AND YYYY BETWEEN #{select_start_year} AND #{select_end_year}
+			</if>
+			ORDER BY YYYY DESC, ADM_CD ASC
+		) AA
+    </select>
+    
+	<!-- 생물측정망(하천) 부착돌말류 현지조사 목록-->
+    <select id="excelAemrvAtalAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,WRSSM_NM
+				,DETAIL_WRSSM_NM
+				,MDT_NM
+				,SDT_NM
+				,RIVER_NM
+				,BSTRM_SE
+				,LA
+				,LO
+				,DE
+				,WETHR_SE
+				,EXAMIN_INSTT_NM
+				,EXMNR_NM
+				,RIVER_STLE_SE
+				,HBTT_SAND_RT
+				,HBTT_PEBB_RT
+				,HBTT_ROCK_RT
+				,HBTT_LP_RT
+				,HBTT_BP_RT
+				,HBTT_ROOT_RT
+				,HBTT_RAP_RT
+				,HBTT_FLOW_RT
+				,HBTT_POND_RT
+				,HBTT_CNPY_RT
+				,HBTT_VEGCOV_RT
+				,SMPLE_COLCT_UNT
+				,SMPLE_COLCT_MTH
+				,SMPLE_SAND_RT
+				,SMPLE_PEBB_RT
+				,SMPLE_ROCK_RT
+				,SMPLE_LP_RT
+				,SMPLE_BP_RT
+				,SMPLE_ROOT_RT
+				,RE_DCOL_SE
+				,RE_SMELL_SE
+				,RE_HRB_RT
+				,RE_SRB_RT
+				,RE_CTY_RT
+				,RE_FRT_RT
+				,RE_FRLND_RT
+				,RE_ISRLPX_RT
+				,RE_DRDG_RT
+				,RE_STALL_RT
+				,RE_WASH_SE
+				,BRRER_LC_SE
+				,BRRER_GAP_DSTNC
+				,BRRER_AFWQ_SE
+				,ENVFTR_BTRV
+				,ENVFTR_DPWT
+				,ENVFTR_WTRTP
+				,ENVFTR_DOC
+				,ENVFTR_PH
+				,ENVFTR_EC
+				,ENVFTR_TUR
+				,CLIMP_PARTCLR_MATTER
+				,CLIMP_DETAIL_CN
+				,CLPSS_PARTCLR_MATTER
+			FROM V_AEMRV_ATAL_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 부착돌말류 분석정보 목록 -->
+    <select id="excelAemrvAtalAnalyList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,TOT_SPCS_CO
+				,CHLA_QY
+				,AFDM_QY
+				,TOT_CELL_DN
+				,KSP_CO
+				,KSP_RT
+				,KSP_CELL_DN
+				,KSP_PARTN_DN
+				,PSP_CO
+				,PSP_RT
+				,PSP_CELL_DN
+				,PSP_PARTN_DN
+				,RIC_IDEX
+				,DKPAR_SCNCENM
+				,DKPAR_CELL_DN
+				,DKPAR_PARTN_DN
+				,LPRSP_CN
+				,EXO_CN
+				,TDI
+				,HEALTH_GRAD
+			FROM V_AEMRV_ATAL_ANALY
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 부착돌말류 출현생물 목록 -->
+    <select id="excelAemrvAtalSpcsList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,SCNCENM
+				,KORNM
+				,CELL_CO
+				,KLYS_IDEX
+				,KLYV_IDEX
+				,WATX_IDEX
+				,WATP_IDEX
+			FROM V_AEMRV_ATAL_SPCS
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+	
+	<!-- 생물측정망(하천) 어류 현지조사 목록 -->
+    <select id="excelAemrvFishAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,WRSSM_NM
+				,DETAIL_WRSSM_NM
+				,MDT_NM
+				,SDT_NM
+				,RIVER_NM
+				,BSTRM_SE
+				,LA
+				,LO
+				,DE
+				,WETHR_SE
+				,EXAMIN_INSTT_NM
+				,EXMNR_NM
+				,RIVER_ODR
+				,COLCT_REQRE_TIME
+				,COLCT_UNT_SE
+				,FLOW_STTUS_SE
+				,STR_ROCK_RT
+				,STR_CNCRT_RT
+				,STR_MD_RT
+				,STR_SAND_RT
+				,STR_SBAL_RT
+				,STR_PEBB_RT
+				,STR_SS_RT
+				,STR_LS_RT
+				,RIVER_STLE_SE
+				,FLOW_VE_SE
+				,CLIMP_PARTCLR_MATTER
+				,CLIMP_DETAIL_CN
+				,CLPSS_PARTCLR_MATTER
+			FROM V_AEMRV_FISH_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 어류 분석정보 목록 -->
+    <select id="excelAemrvFishAnalyList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,ABNRM_INDVD_CO
+				,ABNRM_INDVD_RT
+				,UNEVL_M1_PT
+				,UNEVL_M2_PT
+				,UNEVL_M3_PT
+				,UNEVL_M4_PT
+				,UNEVL_M5_PT
+				,UNEVL_M6_PT
+				,UNEVL_M7_PT
+				,UNEVL_M8_PT
+				,TOT_SPCS_CO
+				,TOT_INDVD_CO
+				,SSP_CO
+				,SSP_RT
+				,SSP_INDVD_CO
+				,SSP_INDVD_RT
+				,TSP_CO
+				,TSP_RT
+				,TSP_INDVD_CO
+				,TSP_INDVD_RT
+				,RIC_IDEX
+				,DKPAR_KORNM
+				,DKPAR_INDVD_CO
+				,DKPAR_POSSESN_RT
+				,DSP_INDVD_RT
+				,RSP_INDVD_RT
+				,PSP_INDVD_RT
+				,ASP_INDVD_RT
+				,FAI
+				,HEALTH_GRAD
+			FROM V_AEMRV_FISH_ANALY
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 어류 출현생물 목록 -->
+    <select id="excelAemrvFishSpcsList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,SCNCENM
+				,KORNM
+				,INDVD_CO
+				,TOE_CODE
+				,FED_CODE
+				,HBTT_CODE
+				,EXO_AT
+				,END_AT
+				,ENSPC_1CLS_AT
+				,ENSPC_2CLS_AT
+				,NTRMN_AT
+			FROM V_AEMRV_FISH_SPCS
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+	
+	<!-- 생물측정망(하천) 서식수변 현지조사 목록 -->
+    <select id="excelAemrvInhaAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,WRSSM_NM
+				,DETAIL_WRSSM_NM
+				,MDT_NM
+				,SDT_NM
+				,RIVER_NM
+				,BSTRM_SE
+				,LA
+				,LO
+				,DE
+				,WETHR_SE
+				,EXAMIN_INSTT_NM
+				,EXMNR_NM
+				,RIVER_GRAD
+				,ALTTD
+				,RRSMLD_SE
+				,FILE_NM
+				,EXIMP_PARTCLR_MATTER
+				,EXIMP_DETAIL_CN
+				,EXPSS_PARTCLR_MATTER
+			FROM V_AEMRV_INHA_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 서식수변 분석정보 목록 -->
+    <select id="excelAemrvInhaAnalyList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,LBSB_CO_EVL
+				,NTRLTY_DGREE_EVL
+				,SPFLD_DVRSTY_EVL
+				,RVS_BT_EVL
+				,RSV_ARV_EVL
+				,ARV_MATRL_EVL
+				,SEDM_STTUS_EVL
+				,WDSTRCTU_DSTRBNC_EVL
+				,FRCE_LANDUSE_EVL
+				,PRLL_LANDUSE_EVL
+				,HRI
+				,HEALTH_GRAD
+			FROM V_AEMRV_INHA_ANALY
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 저서 현지조사 목록 -->
+    <select id="excelAemrvBemaAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,WRSSM_NM
+				,DETAIL_WRSSM_NM
+				,MDT_NM
+				,SDT_NM
+				,RIVER_NM
+				,BSTRM_SE
+				,LA
+				,LO
+				,DE
+				,WETHR_SE
+				,EXAMIN_INSTT_NM
+				,EXMNR_NM
+				,TMPRT
+				,WTRTP
+				,SBN30_EXAMIN_CO
+				,SBN50_EXAMIN_CO
+				,DR_EXAMIN_CO
+				,EK_EXAMIN_CO
+				,DRGUSE_MTST_AT
+				,DRGUSE_FORAGE_AT
+				,DRGUSE_VILAGE_AT
+				,DRGUSE_SOPSRT_AT
+				,DRGUSE_FRLND_AT
+				,DRGUSE_FCTRY_AT
+				,DRGUSE_RESIDE_AT
+				,DRGUSE_ETC_AT
+				,DRGUSE_ETC_CN
+				,POLTNSRC_LVSEWG_AT
+				,POLTNSRC_LSKR_AT
+				,POLTNSRC_WSTR_AT
+				,POLTNSRC_ETC_AT
+				,POLTNSRC_ETC_CN
+				,RE_VTN_TRE_RT
+				,RE_VTN_SRB_RT
+				,RE_VTN_HRB_RT
+				,RE_CNPY_SE
+				,RE_FLD_USE_SE
+				,RE_LFTBNK_NATURE_AT
+				,RE_LFTBNK_STON_AT
+				,RE_LFTBNK_GABN_AT
+				,RE_LFTBNK_CNCRT_AT
+				,RE_LFTBNK_VERTCL_AT
+				,RE_RHTBNK_NATURE_AT
+				,RE_RHTBNK_STON_AT
+				,RE_RHTBNK_GABN_AT
+				,RE_RHTBNK_CNCRT_AT
+				,RE_RHTBNK_VERTCL_AT
+				,STR_MD_RT
+				,STR_SAND_RT
+				,STR_SBAL_RT
+				,STR_PEBB_RT
+				,STR_SS_RT
+				,STR_LS_RT
+				,RIVER_TY_SE
+				,BTRV
+				,WTRBT
+				,AVRG_DPWT
+				,AVRG_SPFLD
+				,RIVER_RAP_RT
+				,RIVER_FLOW_RT
+				,RIVER_POND_RT
+				,TRNSPRC_SE
+				,SMELL_SE
+				,CLIMP_PARTCLR_MATTER
+				,CLIMP_DETAIL_CN
+				,CLPSS_PARTCLR_MATTER
+			FROM V_AEMRV_BEMA_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 저서 분석정보 목록 -->
+    <select id="excelAemrvBemaAnalyList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,TOT_SPCS_CO
+				,TOT_INDVD_CO
+				,DKPAR_SCNCENM
+				,DKPAR_POSSESN_RT
+				,DKPAR_INDVD_CO
+				,DIV_IDEX
+				,RIC_IDEX
+				,EVN_IDEX
+				,EPT_SPCS_CO
+				,EPT_SPCS_RT
+				,EPT_INDVD_CO
+				,EPT_INDVD_RT
+				,BMI
+				,HEALTH_GRAD
+			FROM V_AEMRV_BEMA_ANALY
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 저서 출현생물 목록-->
+    <select id="excelAemrvBemaSpcsList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,SCNCENM
+				,KORNM
+				,INDVD_CO
+				,EXO_AT
+				,ENSPC_1CLS_AT
+				,ENSPC_2CLS_AT
+				,OTKCSP_AT
+				,EPT_AT
+			FROM V_AEMRV_BEMA_SPCS
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 식생 현지조사 목록-->
+    <select id="excelAemrvVtnAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,WRSSM_NM
+				,DETAIL_WRSSM_NM
+				,MDT_NM
+				,SDT_NM
+				,RIVER_NM
+				,BSTRM_SE
+				,LA
+				,LO
+				,DE
+				,WETHR_SE
+				,EXAMIN_INSTT_NM
+				,EXMNR_NM
+				,WTCORS_AR
+				,BRGRD_AR
+				,ARSTRU_AR
+				,MTST_AR
+				,RESIDE_AR
+				,CLVT_AR
+				,EXIMP_PARTCLR_MATTER
+				,EXIMP_DETAIL_CN
+				,EXPSS_PARTCLR_MATTER
+			FROM V_AEMRV_VTN_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+	</select>
+
+    <!-- 생물측정망(하천) 식생 분석정보 목록-->
+    <select id="excelAemrvVtnAnalyList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,DOMPT_SALX_RT
+				,DOMPT_GRMN_RT
+				,DOMPT_CPRC_RT
+				,DOMPT_OBL_RT
+				,DOMPT_FACW_RT
+				,DOMPT_OBLFACW_RT
+				,DOMPT_TRE_RT
+				,DOMPT_NATSPCS_RT
+				,DOMPT_DISSPCS_RT
+				,DOMPT_APGEN_RT
+				,DOMAR_SALX_RT
+				,DOMAR_GRMN_RT
+				,DOMAR_CPRC_RT
+				,DOMAR_OBL_RT
+				,DOMAR_FACW_RT
+				,DOMAR_OBLFACW_RT
+				,DOMAR_TRE_RT
+				,DOMAR_NATSPCS_RT
+				,DOMAR_DISSPCS_RT
+				,DOMAR_APGEN_RT
+				,EVL_HAA_RT
+				,EVL_EA_RT
+				,EVL_WTD_RT
+				,EVL_SALFRAA_RT
+				,EVL_TOSC_RT
+				,EVL_BTI_RT
+				,EVL_HAA_SCORE
+				,EVL_EA_SCORE
+				,EVL_WTD_SCORE
+				,EVL_SALFRAA_SCORE
+				,EVL_TOSC_SCORE
+				,EVL_BTI_SCORE
+				,TOT_COMM_CO
+				,TOT_AR
+				,RVI
+				,HEALTH_GRAD
+			FROM V_AEMRV_VTN_ANALY
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 식생 출현식생 목록-->
+    <select id="excelAemrvVtnSpcsList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,SCNCENM
+				,KORNM
+				,ERE_AT
+				,SMLD_ERE_CODE
+				,GROWFRM_CODE
+				,NATSPCS_AT
+				,CULSP_AT
+				,EXO_AT
+				,APPN_1_AT
+				,APPN_2_AT
+				,TOE_AT
+				,DIS_AT
+				,RARSP_AT
+				,END_AT
+				,ENSPC_AT
+			FROM V_AEMRV_VTN_SPCS
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 식생 식생면적 목록-->
+    <select id="excelAemrvVtnAreaList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,SCNCENM
+				,KORNM
+				,AR
+				,SMLD_ERE_CODE
+				,GROWFRM_CODE
+				,NATSPCS_AT
+				,CULSP_AT
+				,EXO_AT
+				,APPN_1_AT
+				,APPN_2_AT
+				,TOE_AT
+				,DIS_AT
+				,RARSP_AT
+				,END_AT
+				,ENSPC_AT
+			FROM V_AEMRV_VTN_AREA
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 식생 단면정보 목록-->
+    <select id="excelAemrvVtnSctnList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,PNTTM_LA
+				,PNTTM_LO
+				,TMNL_LA
+				,TMNL_LO
+				,LC
+				,PNTTM_ANGLE
+				,PNTTM_TARGT
+				,FRCE_RVSTRCT_SE
+				,FRCE_DSTRB_SE
+				,PRLL_LFTBNK_SE
+				,PRLL_RHTBNK_SE
+				,EXIMP_PARTCLR_MATTER
+			FROM V_AEMRV_VTN_SCTN
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 식생 단면 구간별 정보 목록-->
+    <select id="excelAemrvVtnSctndtlList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,SCTN_NO
+				,DSTNC
+				,ANGLE
+				,PARTN_HG
+				,DPWT
+				,RVSHP_MTRQLT
+				,BRGRD_SE
+				,COMM
+				,TRE_HG
+				,TRE_CV
+				,ARBSC_HG
+				,ARBSC_CV
+				,SRB_HG
+				,SRB_CV
+				,HRB_HG
+				,HRB_CV
+			FROM V_AEMRV_VTN_SCTNDTL
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 식생 우점도 목록-->
+    <select id="excelAemrvVtnSctndomList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT 
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,SCTN_NO
+				,KORNM
+				,DOM_IDEX
+			FROM V_AEMRV_VTN_SCTNDOM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하천) 수질 목록-->
+    <select id="excelAemrvQltwtrDtaList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				YEAR
+				,TME
+				,SPOT_CODE
+				,SPOT_NM
+				,WTRTP
+				,DOC
+				,PH
+				,EC
+				,TUR
+				,BOD
+				,NH3N
+				,NO3N
+				,TN
+				,PO4P
+				,TP
+				,CHLA
+				,SS
+				,RM
+				,DETAIL_MATTER
+			FROM V_AEMRV_QLTWTR_DTA
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND SPOT_CODE IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND YEAR || TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY YEAR || TME DESC, SPOT_CODE ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하구) 부착돌말류 현지조사 및 분석 목록-->
+    <select id="excelAemesAtalAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				EXBF_NM 
+				,EXAMIN_YEAR
+				,EXAMIN_TME
+				,EST_SE_NM 
+				,SAREA_NM 
+				,AL_NM 
+				,WRSSM_NM 
+				,AM_NM
+				,EST_NM 
+				,EXMEN_NM 
+				,EXMNR_NM
+				,EXAMIN_DE
+				,LA_CRDNT
+				,LO_CRDNT
+				,EXAMIN_TRGET_SE_CD
+				,RIVST_CD
+				,HBTT_SAND_RT
+				,HBTT_PEBB_RT
+				,HBTT_ROCK_RT
+				,HBTT_LP_RT
+				,HBTT_BP_RT
+				,HBTT_ROOT_RT
+				,FLOW_RAPIDS_RT
+				,FLOW_FLOW_RT
+				,FLOW_SMALL_RT
+				,HBTT_CANOPY_RT
+				,HBTT_VECV_RT
+				,SPLORE_COLLT_CD
+				,SPLORE_COLLM_CD
+				,SMPLE_SAND_RT
+				,SMPLE_PEBB_RT
+				,SMPLE_ROCK_RT
+				,SMPLE_LP_RT
+				,SMPLE_BP_RT
+				,SMPLE_ROOT_RT
+				,DCOL_CD
+				,SMELL_CD
+				,SHVE_ABSTRCT_RT
+				,SHVE_SRB_RT
+				,LAD_CTY_RT
+				,LAD_FRT_RT
+				,LAD_FRLND_RT
+				,LAD_PBLCRP_RT
+				,LAD_DC_RT
+				,LAD_STALL_RT
+				,SAND_WASH_RT_CD
+				,BR_SE_CD
+				,BR_DSTNC
+				,BR_QLTWTR_AFFC_YN
+				,ENVRN_BTRV
+				,ENVRN_DPWT
+				,ENVRN_WT
+				,ENVRN_DO
+				,ENVRN_PH
+				,ENVRN_CONDT
+				,ENVRN_NTU
+				,ENVRN_SALT_DO_RT
+				,ENVRN_CHOXDM
+				,ENVRN_TN
+				,ENVRN_TP
+				,NTIPS_PTCR_MATT
+				,NTIPS_DETAIL_CN
+				,NOTI_POSS_PTCR_MATT
+				,LBDY_QY_CHLA
+				,LBDY_QY_AFDM
+				,TOT_INDVD_CO
+				,TDI_LVB_IDEX
+				,TDI_GRAD
+			FROM V_AEMES_ATAL_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND EXBF_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND EXAMIN_YEAR || EXAMIN_TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY EXAMIN_YEAR || EXAMIN_TME DESC, EXBF_CD ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하구) 부착돌말류 출현생물 목록-->
+    <select id="excelAemesAtalSpcsList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				EXBF_NM 
+				,EXAMIN_YEAR
+				,EXAMIN_TME
+				,SP_SCNCENM
+				,SP_KORNM
+				,INDVD_CO
+				,KLYS_IDEX
+				,KLYV_IDEX
+				,WATX_IDEX
+				,WATP_IDEX
+			FROM V_AEMES_ATAL_SPCS
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND EXBF_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND EXAMIN_YEAR || EXAMIN_TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY EXAMIN_YEAR || EXAMIN_TME DESC, EXBF_CD ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하구) 어류 현지조사 및 분석 목록-->
+    <select id="excelAemesFishAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				EXBF_NM 
+				,EXAMIN_YEAR
+				,EXAMIN_TME
+				,EST_SE_NM 
+				,SAREA_NM 
+				,AL_NM 
+				,WRSSM_NM 
+				,AM_NM
+				,EST_NM 
+				,EXMEN_NM 
+				,EXMNR_NM
+				,EXAMIN_DE
+				,LA_CRDNT
+				,LO_CRDNT
+				,EXMIMP_PTCR_MATT 
+				,EXAMIN_PTCR_MATT 
+				,COLLT_CD 
+				,ABMIND_CO
+				,M1_DIV_IDEX 
+				,M2_TTERE_CO 
+				,M3_MFERE_CO 
+				,M4_HRERE_CO 
+				,M5_ALERE_CO 
+				,M6_TEERE_RT 
+				,M7_LTRERE_RATE 
+				,M8_ABMIND_RATE 
+				,M1_GRAD 
+				,M2_GRAD 
+				,M3_GRAD 
+				,M4_GRAD 
+				,M5_GRAD 
+				,M6_GRAD 
+				,M7_GRAD 
+				,M8_GRAD 
+				,IBI_IDEX 
+				,IBI_GRAD 
+			FROM V_AEMES_FISH_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND EXBF_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND EXAMIN_YEAR || EXAMIN_TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY EXAMIN_YEAR || EXAMIN_TME DESC, EXBF_CD ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하구) 어류 출현생물 목록-->
+    <select id="excelAemesFishSpcsList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				EXBF_NM
+				,EXAMIN_YEAR
+				,EXAMIN_TME
+				,SP_SCNCENM
+				,SP_KORNM
+				,INDVD_CO
+				,MSP_AT
+				,RSP_AT
+				,EXO_AT
+				,BSP_AT
+				,TSP_AT
+				,TRSP_AT
+				,HSP_AT
+				,END_AT
+				,CSP_AT
+			FROM V_AEMES_FISH_SPCS
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND EXBF_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND EXAMIN_YEAR || EXAMIN_TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY EXAMIN_YEAR || EXAMIN_TME DESC, EXBF_CD ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하구) 저서성대형무척추동물 현지조사 및 분석 목록-->
+    <select id="excelAemesBemaAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				EXBF_NM 
+				,EXAMIN_YEAR
+				,EXAMIN_TME
+				,EST_SE_NM 
+				,SAREA_NM 
+				,AL_NM 
+				,WRSSM_NM 
+				,AM_NM
+				,EST_NM 
+				,EXMEN_NM 
+				,EXMNR_NM
+				,EXAMIN_DE
+				,LA_CRDNT
+				,LO_CRDNT
+				,EXMIMP_PTCR_MATT 
+				,EXMAT_PTCR_MATT 
+				,WETHER_TMPRT 
+				,WETHER_WT 
+				,SBN30_EXAMIN_CO 
+				,DR_EXAMIN_CO 
+				,POR20_EXAMIN_CO 
+				,SPCS_CO 
+				,INDVD_DN 
+				,SENSP_CO 
+				,SENSP_CO_RATE 
+				,SNTIND_DN_RT 
+				,SNTIND_DN_RATE 
+				,TOESP_CO_RT 
+				,TOESP_CO_RATE 
+				,TOE_INDVD_DN 
+				,TOE_INDVD_DN_RATE 
+				,SNTOSP_CO_RATE 
+				,SNTOIN_DN_RATE 
+				,BKPKSP_CO 
+				,BKPKSP_CO_RATE 
+				,HRSMN_INDDN 
+				,HRSMN_INDDN_RATE 
+				,CLUSTER_DOM_IDEX 
+				,CLUSTER_DIV_IDEX 
+				,CLUSTER_ABNDNC_IDEX 
+				,CLUSTER_EQLTY_IDEX 
+				,M1_SPCS_CO 
+				,M2_INDVD_DN 
+				,M3_SENSP_CO 
+				,M4_SENSP_DN 
+				,M5_BKPKSP_CO 
+				,M6_BKPKSP_DN 
+				,M7_DIV_IDEX 
+				,KEBI_TOTAL 
+				,KEBI_GRAD 
+			FROM V_AEMES_BEMA_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND EXBF_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND EXAMIN_YEAR || EXAMIN_TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY EXAMIN_YEAR || EXAMIN_TME DESC, EXBF_CD ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하구) 저서성대형무척추동물 출현생물 목록-->
+    <select id="excelAemesBemaSpcsList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				EXBF_NM 
+				,EXAMIN_YEAR
+				,EXAMIN_TME
+				,SP_SCNCENM
+				,SP_KORNM
+				,INDVD_CO
+				,LPRSP_AT 
+				,SPCS_SE 
+				,HSP_AT 
+				,POLLUTN_CLSS_NCL 
+				,IX_AGRVTN_NCL 
+				,FFG_CODE 
+				,ESB_SE
+			FROM V_AEMES_BEMA_SPCS
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND EXBF_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND EXAMIN_YEAR || EXAMIN_TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY EXAMIN_YEAR || EXAMIN_TME DESC, EXBF_CD ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하구) 식생 현지조사 및 분석 목록-->
+    <select id="excelAemesVtnAcpexmList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				EXBF_NM 
+				,EXAMIN_YEAR
+				,EXAMIN_TME
+				,EST_SE_NM 
+				,SAREA_NM 
+				,AL_NM 
+				,WRSSM_NM 
+				,AM_NM
+				,EST_NM 
+				,EXMEN_NM 
+				,EXMNR_NM
+				,EXAMIN_DE
+				,LA_CRDNT
+				,LO_CRDNT
+				,EXMIMP_PTCR_MATT 
+				,EXAMIN_PTCR_MATT 
+				,EXAMIN_MTH_CD 
+				,M1_LCT_ENVRN 
+				,M5_VTN_DISTRB 
+				,M1_VTNTEL 
+				,M2_VTNTEL 
+				,M3_VTNTEL 
+				,M4_VTNTEL 
+				,M5_VTNTEL 
+				,VTNTEL_IDEX 
+				,VTNTEL_GRAD 
+				,VTSEAR_MV 
+				,VTSEAR_LDPLMY 
+				,VTSEAR_FNPLMY 
+				,VTSEAR_AS 
+				,VTSEAR_WATERS 
+				,VTSEAR_FMLND 
+				,VTSEAR_SM 
+				,VTSEAT_MV 
+				,VTSEAT_LDPLMY 
+				,VTSEAT_FNPLMY 
+				,VTSEAT_AS 
+				,VTSEAT_WATERS 
+				,VTSEAT_FMLND 
+				,VTSEAT_SM 
+				,VTALSE_DMCY_NM 
+				,VTALSE_DMCY_AR 
+			FROM V_AEMES_VTN_ACPEXM
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND EXBF_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND EXAMIN_YEAR || EXAMIN_TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY EXAMIN_YEAR || EXAMIN_TME DESC, EXBF_CD ASC
+		) AA
+    </select>
+    
+    <!-- 생물측정망(하구) 식생 면적 목록-->
+    <select id="excelAemesVtnSpcsList" parameterType="Map" resultType="java.util.LinkedHashMap">
+		SELECT ROWNUM RNUM, AA.* FROM (  
+			SELECT
+				EXBF_NM 
+				,EXAMIN_YEAR
+				,EXAMIN_TME
+				,VTN_NM 
+				,CLY_NM 
+				,CLY_AR
+			FROM V_AEMES_VTN_SPCS
+			WHERE 1=1
+			<if test='adm_cd_list != null and adm_cd_list != ""'>
+				AND EXBF_CD IN 
+				<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+				AND EXAMIN_YEAR || EXAMIN_TME BETWEEN #{startDate} AND #{endDate}
+			</if>
+			ORDER BY EXAMIN_YEAR || EXAMIN_TME DESC, EXBF_CD ASC
+		) AA
+    </select>
+    
+    <select id="ExcelFiveDateY" parameterType="Map" resultType="java.util.LinkedHashMap">
+  			SELECT RIVER_ID ,SITE_NAME,MSR_DATE,F02,F03,F04,F05,F06,F79
+				,F27,F28,F36,F37,F35,F29,F14,F17,F19,F56,F20,F21,F22,F23,F24,F25,F26
+				,F74,F75,F76,F77,F78,F07,F12,F13,F15
+  			  FROM (
+  				SELECT RIVER_ID,
+                         SITE_NAME,
+                         MSR_DATE,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M02' THEN M02 ELSE NULL END) AS F02,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M03' THEN M03 ELSE NULL END) AS F03,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M04' THEN M04 ELSE NULL END) AS F04,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M05' THEN M05 ELSE NULL END) AS F05,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M06' THEN M06 ELSE NULL END) AS F06,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M07' THEN M07 ELSE NULL END) AS F07,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M08' THEN M08 ELSE NULL END) AS F08,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M09' THEN M09 ELSE NULL END) AS F09,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M10' THEN M10 ELSE NULL END) AS F10,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M11' THEN M11 ELSE NULL END) AS F11,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M12' THEN M12 ELSE NULL END) AS F12,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M13' THEN M13 ELSE NULL END) AS F13,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M14' THEN M14 ELSE NULL END) AS F14,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M15' THEN M15 ELSE NULL END) AS F15,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M16' THEN M16 ELSE NULL END) AS F16,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M17' THEN M17 ELSE NULL END) AS F17,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M18' THEN M18 ELSE NULL END) AS F18,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M19' THEN M19 ELSE NULL END) AS F19,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M20' THEN M20 ELSE NULL END) AS F20,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M21' THEN M21 ELSE NULL END) AS F21,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M22' THEN M22 ELSE NULL END) AS F22,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M23' THEN M23 ELSE NULL END) AS F23,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M24' THEN M24 ELSE NULL END) AS F24,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M25' THEN M25 ELSE NULL END) AS F25,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M26' THEN M26 ELSE NULL END) AS F26,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M27' THEN M27 ELSE NULL END) AS F27,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M28' THEN M28 ELSE NULL END) AS F28,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M29' THEN M29 ELSE NULL END) AS F29,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M30' THEN M30 ELSE NULL END) AS F30,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M31' THEN M31 ELSE NULL END) AS F31,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M32' THEN M32 ELSE NULL END) AS F32,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M33' THEN M33 ELSE NULL END) AS F33,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M34' THEN M34 ELSE NULL END) AS F34,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M35' THEN M35 ELSE NULL END) AS F35,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M36' THEN M36 ELSE NULL END) AS F36,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M37' THEN M37 ELSE NULL END) AS F37,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M38' THEN M38 ELSE NULL END) AS F38,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M39' THEN M39 ELSE NULL END) AS F39,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M40' THEN M40 ELSE NULL END) AS F40,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M41' THEN M41 ELSE NULL END) AS F41,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M42' THEN M42 ELSE NULL END) AS F42,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M43' THEN M43 ELSE NULL END) AS F43,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M44' THEN M44 ELSE NULL END) AS F44,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M45' THEN M45 ELSE NULL END) AS F45,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M46' THEN M46 ELSE NULL END) AS F46,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M47' THEN M47 ELSE NULL END) AS F47,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M48' THEN M48 ELSE NULL END) AS F48,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M49' THEN M49 ELSE NULL END) AS F49,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M50' THEN M50 ELSE NULL END) AS F50,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M51' THEN M51 ELSE NULL END) AS F51,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M52' THEN M52 ELSE NULL END) AS F52,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M53' THEN M53 ELSE NULL END) AS F53,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M54' THEN M54 ELSE NULL END) AS F54,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M55' THEN M55 ELSE NULL END) AS F55,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M56' THEN M56 ELSE NULL END) AS F56,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M57' THEN M57 ELSE NULL END) AS F57,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M58' THEN M58 ELSE NULL END) AS F58,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M59' THEN M59 ELSE NULL END) AS F59,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M60' THEN M60 ELSE NULL END) AS F60,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M61' THEN M61 ELSE NULL END) AS F61,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M62' THEN M62 ELSE NULL END) AS F62,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M63' THEN M63 ELSE NULL END) AS F63,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M64' THEN M64 ELSE NULL END) AS F64,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M65' THEN M65 ELSE NULL END) AS F65,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M66' THEN M66 ELSE NULL END) AS F66,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M67' THEN M67 ELSE NULL END) AS F67,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M68' THEN M68 ELSE NULL END) AS F68,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M69' THEN M69 ELSE NULL END) AS F69,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M70' THEN M70 ELSE NULL END) AS F70,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M71' THEN M71 ELSE NULL END) AS F71,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M72' THEN M72 ELSE NULL END) AS F72,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M73' THEN M73 ELSE NULL END) AS F73,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M74' THEN M74 ELSE NULL END) AS F74,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M75' THEN M75 ELSE NULL END) AS F75,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M76' THEN M76 ELSE NULL END) AS F76,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M77' THEN M77 ELSE NULL END) AS F77,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M78' THEN M78 ELSE NULL END) AS F78,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M79' THEN M79 ELSE NULL END) AS F79,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M80' THEN M80 ELSE NULL END) AS F80,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M81' THEN M81 ELSE NULL END) AS F81,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M82' THEN M82 ELSE NULL END) AS F82,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M83' THEN M83 ELSE NULL END) AS F83,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M84' THEN M84 ELSE NULL END) AS F84,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M85' THEN M85 ELSE NULL END) AS F85,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M86' THEN M86 ELSE NULL END) AS F86,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M87' THEN M87 ELSE NULL END) AS F87,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M88' THEN M88 ELSE NULL END) AS F88,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M89' THEN M89 ELSE NULL END) AS F89,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M90' THEN M90 ELSE NULL END) AS F90,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M91' THEN M91 ELSE NULL END) AS F91,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M92' THEN M92 ELSE NULL END) AS F92,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M93' THEN M93 ELSE NULL END) AS F93,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M94' THEN M94 ELSE NULL END) AS F94,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M95' THEN M95 ELSE NULL END) AS F95,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M96' THEN M96 ELSE NULL END) AS F96,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M97' THEN M97 ELSE NULL END) AS F97,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M98' THEN M98 ELSE NULL END) AS F98,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M99' THEN M99 ELSE NULL END) AS F99,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M100' THEN M100 ELSE NULL END) AS F100,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M101' THEN M101 ELSE NULL END) AS F101,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M105' THEN M105 ELSE NULL END) AS F105,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M106' THEN M106 ELSE NULL END) AS F106,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M107' THEN M107 ELSE NULL END) AS F107,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M108' THEN M108 ELSE NULL END) AS F108,
+                         MAX (CASE WHEN BB.ITEM_ID = 'M109' THEN M109 ELSE NULL END) AS F109
+                    FROM (
+                    SELECT DECODE (A.RIVER_ID,'R01', '한강','R02', '낙동강','R03', '금강','영산강')AS RIVER_ID,
+                             A.SITE_ID,SITE_NAME,TO_CHAR (TO_DATE (MSR_DATE, 'YYYY.MM.DD HH24:MI:SS'),'YYYY.MM.DD HH24:MI')AS MSR_DATE,
+                             M01,
+                             M02,
+                             M03,
+                             M04,
+                             M05,
+                             M06,
+                             M07,
+                             M08,
+                             M09,
+                             M10,
+                             M11,
+                             M12,
+                             M13,
+                             M14,
+                             M15,
+                             M16,
+                             M17,
+                             M18,
+                             M19,
+                             M20,
+                             M21,
+                             M22,
+                             M23,
+                             M24,
+                             M25,
+                             M26,
+                             M27,
+                             M28,
+                             M29,
+                             M30,
+                             M31,
+                             M32,
+                             M33,
+                             M34,
+                             M35,
+                             M36,
+                             M37,
+                             M38,
+                             M39,
+                             M40,
+                             M41,
+                             M42,
+                             M43,
+                             M44,
+                             M45,
+                             M46,
+                             M47,
+                             M48,
+                             M49,
+                             M50,
+                             M51,
+                             M52,
+                             M53,
+                             M54,
+                             M55,
+                             M56,
+                             M57,
+                             M58,
+                             M59,
+                             M60,
+                             M61,
+                             M62,
+                             M63,
+                             M64,
+                             M65,
+                             M66,
+                             M67,
+                             M68,
+                             M69,
+                             M70,
+                             M71,
+                             M72,
+                             M73,
+                             M74,
+                             M75,
+                             M76,
+                             M77,
+                             M78,
+                             M79,
+                             M80,
+                             M81,
+                             M82,
+                             M83,
+                             M84,
+                             M85,
+                             M86,
+                             M87,
+                             M88,
+                             M89,
+                             M90,
+                             M91,
+                             M92,
+                             M93,
+                             M94,
+                             M95,
+                             M96,
+                             M97,
+                             M98,
+                             M99,
+                             M100,
+                             M101,
+                             M105,
+                             M106,
+                             M107,
+                             M108,
+                             M109
+                        FROM SITEINFO_TB A, MAN_FIVEDATA_TB B
+                           WHERE A.SITE_ID = #{adm_cd} AND A.SITE_ID = B.SITE_ID
+                                AND TO_DATE(SUBSTR(B.MSR_DATE, 1, 8),'YYYY-MM-DD') = #{startYearDate}
+                             ) AA,
+                       (
+                       SELECT 
+                             SITE_ID, ITEM_ID
+                        FROM
+                            SITEITEMLIST2_TB
+                       WHERE USE_YN = '1'
+                       ) BB
+                 WHERE AA.SITE_ID = BB.SITE_ID
+                 AND ROWNUM BETWEEN 1 AND 60000
+                 GROUP BY RIVER_ID, SITE_NAME, MSR_DATE
+                 ) A
+                 ORDER BY A.MSR_DATE
+	</select>
+	
+	
+	<select id="ExcelFiveDateN" parameterType="Map" resultType="java.util.LinkedHashMap">
+				  SELECT RIVER_ID ,SITE_NAME,MSR_DATE,F02,F03,F04,F05,F06,F79
+				,F27,F28,F36,F37,F35,F29,F14,F17,F19,F56,F20,F21,F22,F23,F24,F25,F26
+				,F74,F75,F76,F77,F78,F07,F12,F13,F15
+  			  FROM (
+				  SELECT RIVER_ID,
+				         SITE_NAME,
+				         MSR_DATE,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M02' THEN M02 ELSE NULL END) AS F02,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M03' THEN M03 ELSE NULL END) AS F03,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M04' THEN M04 ELSE NULL END) AS F04,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M05' THEN M05 ELSE NULL END) AS F05,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M06' THEN M06 ELSE NULL END) AS F06,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M07' THEN M07 ELSE NULL END) AS F07,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M08' THEN M08 ELSE NULL END) AS F08,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M09' THEN M09 ELSE NULL END) AS F09,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M10' THEN M10 ELSE NULL END) AS F10,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M11' THEN M11 ELSE NULL END) AS F11,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M12' THEN M12 ELSE NULL END) AS F12,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M13' THEN M13 ELSE NULL END) AS F13,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M14' THEN M14 ELSE NULL END) AS F14,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M15' THEN M15 ELSE NULL END) AS F15,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M16' THEN M16 ELSE NULL END) AS F16,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M17' THEN M17 ELSE NULL END) AS F17,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M18' THEN M18 ELSE NULL END) AS F18,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M19' THEN M19 ELSE NULL END) AS F19,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M20' THEN M20 ELSE NULL END) AS F20,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M21' THEN M21 ELSE NULL END) AS F21,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M22' THEN M22 ELSE NULL END) AS F22,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M23' THEN M23 ELSE NULL END) AS F23,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M24' THEN M24 ELSE NULL END) AS F24,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M25' THEN M25 ELSE NULL END) AS F25,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M26' THEN M26 ELSE NULL END) AS F26,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M27' THEN M27 ELSE NULL END) AS F27,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M28' THEN M28 ELSE NULL END) AS F28,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M29' THEN M29 ELSE NULL END) AS F29,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M30' THEN M30 ELSE NULL END) AS F30,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M31' THEN M31 ELSE NULL END) AS F31,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M32' THEN M32 ELSE NULL END) AS F32,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M33' THEN M33 ELSE NULL END) AS F33,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M34' THEN M34 ELSE NULL END) AS F34,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M35' THEN M35 ELSE NULL END) AS F35,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M36' THEN M36 ELSE NULL END) AS F36,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M37' THEN M37 ELSE NULL END) AS F37,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M38' THEN M38 ELSE NULL END) AS F38,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M39' THEN M39 ELSE NULL END) AS F39,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M40' THEN M40 ELSE NULL END) AS F40,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M41' THEN M41 ELSE NULL END) AS F41,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M42' THEN M42 ELSE NULL END) AS F42,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M43' THEN M43 ELSE NULL END) AS F43,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M44' THEN M44 ELSE NULL END) AS F44,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M45' THEN M45 ELSE NULL END) AS F45,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M46' THEN M46 ELSE NULL END) AS F46,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M47' THEN M47 ELSE NULL END) AS F47,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M48' THEN M48 ELSE NULL END) AS F48,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M49' THEN M49 ELSE NULL END) AS F49,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M50' THEN M50 ELSE NULL END) AS F50,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M51' THEN M51 ELSE NULL END) AS F51,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M52' THEN M52 ELSE NULL END) AS F52,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M53' THEN M53 ELSE NULL END) AS F53,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M54' THEN M54 ELSE NULL END) AS F54,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M55' THEN M55 ELSE NULL END) AS F55,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M56' THEN M56 ELSE NULL END) AS F56,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M57' THEN M57 ELSE NULL END) AS F57,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M58' THEN M58 ELSE NULL END) AS F58,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M59' THEN M59 ELSE NULL END) AS F59,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M60' THEN M60 ELSE NULL END) AS F60,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M61' THEN M61 ELSE NULL END) AS F61,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M62' THEN M62 ELSE NULL END) AS F62,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M63' THEN M63 ELSE NULL END) AS F63,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M64' THEN M64 ELSE NULL END) AS F64,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M65' THEN M65 ELSE NULL END) AS F65,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M66' THEN M66 ELSE NULL END) AS F66,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M67' THEN M67 ELSE NULL END) AS F67,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M68' THEN M68 ELSE NULL END) AS F68,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M69' THEN M69 ELSE NULL END) AS F69,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M70' THEN M70 ELSE NULL END) AS F70,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M71' THEN M71 ELSE NULL END) AS F71,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M72' THEN M72 ELSE NULL END) AS F72,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M73' THEN M73 ELSE NULL END) AS F73,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M74' THEN M74 ELSE NULL END) AS F74,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M75' THEN M75 ELSE NULL END) AS F75,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M76' THEN M76 ELSE NULL END) AS F76,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M77' THEN M77 ELSE NULL END) AS F77,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M78' THEN M78 ELSE NULL END) AS F78,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M79' THEN M79 ELSE NULL END) AS F79,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M80' THEN M80 ELSE NULL END) AS F80,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M81' THEN M81 ELSE NULL END) AS F81,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M82' THEN M82 ELSE NULL END) AS F82,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M83' THEN M83 ELSE NULL END) AS F83,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M84' THEN M84 ELSE NULL END) AS F84,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M85' THEN M85 ELSE NULL END) AS F85,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M86' THEN M86 ELSE NULL END) AS F86,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M87' THEN M87 ELSE NULL END) AS F87,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M88' THEN M88 ELSE NULL END) AS F88,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M89' THEN M89 ELSE NULL END) AS F89,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M90' THEN M90 ELSE NULL END) AS F90,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M91' THEN M91 ELSE NULL END) AS F91,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M92' THEN M92 ELSE NULL END) AS F92,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M93' THEN M93 ELSE NULL END) AS F93,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M94' THEN M94 ELSE NULL END) AS F94,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M95' THEN M95 ELSE NULL END) AS F95,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M96' THEN M96 ELSE NULL END) AS F96,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M97' THEN M97 ELSE NULL END) AS F97,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M98' THEN M98 ELSE NULL END) AS F98,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M99' THEN M99 ELSE NULL END) AS F99,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M100' THEN M100 ELSE NULL END) AS F100,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M101' THEN M101 ELSE NULL END) AS F101,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M105' THEN M105 ELSE NULL END) AS F105,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M106' THEN M106 ELSE NULL END) AS F106,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M107' THEN M107 ELSE NULL END) AS F107,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M108' THEN M108 ELSE NULL END) AS F108,
+				         MAX (CASE WHEN BB.ITEM_ID = 'M109' THEN M109 ELSE NULL END) AS F109
+				    FROM (
+				    SELECT DECODE (A.RIVER_ID,'R01', '한강','R02', '낙동강','R03', '금강','영산강')AS RIVER_ID,
+				             A.SITE_ID,SITE_NAME,TO_CHAR (TO_DATE (MSR_DATE, 'YYYY.MM.DD HH24:MI:SS'),'YYYY.MM.DD HH24:MI')AS MSR_DATE,
+				             M01,
+				             M02,
+				             M03,
+				             M04,
+				             M05,
+				             M06,
+				             M07,
+				             M08,
+				             M09,
+				             M10,
+				             M11,
+				             M12,
+				             M13,
+				             M14,
+				             M15,
+				             M16,
+				             M17,
+				             M18,
+				             M19,
+				             M20,
+				             M21,
+				             M22,
+				             M23,
+				             M24,
+				             M25,
+				             M26,
+				             M27,
+				             M28,
+				             M29,
+				             M30,
+				             M31,
+				             M32,
+				             M33,
+				             M34,
+				             M35,
+				             M36,
+				             M37,
+				             M38,
+				             M39,
+				             M40,
+				             M41,
+				             M42,
+				             M43,
+				             M44,
+				             M45,
+				             M46,
+				             M47,
+				             M48,
+				             M49,
+				             M50,
+				             M51,
+				             M52,
+				             M53,
+				             M54,
+				             M55,
+				             M56,
+				             M57,
+				             M58,
+				             M59,
+				             M60,
+				             M61,
+				             M62,
+				             M63,
+				             M64,
+				             M65,
+				             M66,
+				             M67,
+				             M68,
+				             M69,
+				             M70,
+				             M71,
+				             M72,
+				             M73,
+				             M74,
+				             M75,
+				             M76,
+				             M77,
+				             M78,
+				             M79,
+				             M80,
+				             M81,
+				             M82,
+				             M83,
+				             M84,
+				             M85,
+				             M86,
+				             M87,
+				             M88,
+				             M89,
+				             M90,
+				             M91,
+				             M92,
+				             M93,
+				             M94,
+				             M95,
+				             M96,
+				             M97,
+				             M98,
+				             M99,
+				             M100,
+				             M101,
+				             M105,
+				             M106,
+				             M107,
+				             M108,
+				             M109
+				        FROM SITEINFO_TB A, FIVEDATA_TB B
+				           WHERE 
+				                A.SITE_ID = #{adm_cd}
+				             AND A.SITE_ID = B.SITE_ID
+				             AND TO_DATE(SUBSTR(B.MSR_DATE, 1, 8),'YYYY-MM-DD') = #{startYearDate}
+				             ) AA,
+				       (
+				       SELECT 
+				             SITE_ID, ITEM_ID
+				        FROM
+				            SITEITEMLIST2_TB
+				       WHERE USE_YN = '1'
+				       ) BB
+				 WHERE AA.SITE_ID = BB.SITE_ID
+				 AND ROWNUM BETWEEN 1 AND 60000
+				 GROUP BY RIVER_ID, SITE_NAME, MSR_DATE
+				 ) A
+				 ORDER BY A.MSR_DATE
+	</select>
+	
+	 <select id="Excel4WaterObserve" parameterType="Map" resultType="java.util.LinkedHashMap">
+				SELECT 
+					OBSRWL_NM
+					,OBSR_DT
+					,UGRWTR_WAL
+					,OBSRWL_AL
+				FROM 
+				V_UGRWTR_OBSRDTA_A A
+				WHERE 1=1
+				<if test='adm_cd_list != null and adm_cd_list != ""'>
+					AND OBSRWL_CODE IN 
+					<foreach collection="adm_cd_list" item="item" open="(" close=")" separator=",">
+						#{item}
+					</foreach>
+				</if>
+				<if test='startDate != null and endDate != null and startDate != "" and endDate != ""'>
+					AND SUBSTR(OBSR_DT,0,10) BETWEEN #{startDate} AND #{endDate}
+	    			AND ROWNUM BETWEEN 1 AND 60000  
+				</if>
+    </select>
+    
+</mapper>
